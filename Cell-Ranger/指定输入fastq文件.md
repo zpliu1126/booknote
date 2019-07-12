@@ -101,22 +101,62 @@ cellranger count --id=sampletest
 + **except-cells**：期望得到的细胞数目 默认是3000个，一般大家都设置1000
 + **--force-cells**：强制多少个细胞会通过cell detection algorithm算法；当这个条形码图与cell range结果不一致的时候
 + **--lanes**：限制某一个样品泳道进行分析
++ **--transcriptome=DIR**:指定参考基因组文件，用于比对和计算基因表达量的
 
 
 
+### 定制reference目录
 
+首先定制reference目录是需要基因组文件和对应的GTF文件的，**需要注意的是GTF和基因组中的染色体信息是要能够匹配的**
+
+1. 过滤GTF文件
+
+   ```bash
+   cellrange mkgtf input.gtf output.gtf --attribute=键值对
+   ```
+
+   > 但是我感觉为的gtf文件里键值对没啥可以过滤的属性，这一步就可以直接忽略
+
+​    2.定制reference
+
+  ```bash
+cellrange mkref 脚本将会对输入的基因组序列和gtf文件进行分析
+  ```
+
++ #### 参数介绍
+
+  + **--genome=**：指定输出的文件夹的名字
+  + **--fasta**=：指定基因组序列的路径，如果有多个基因组可以使用这个参数多次
+  + **--genes=** ：指定注释文件的路径，当指定了多个基因组的时候，也需要指定多个注释信息
+  + **--nthreads**：指定线程的数目，默认是1个
+  + **--memgb**：最大内存使用数目，默认是16Gb，这个参数必须要大于基因组文件的大小，不然肯定内存不足
+  + **--ref-version**：指定版本信息，这个参数是可选的
+
++ 多个基因组的例子
+
+  ```bash
+  $ cellranger mkref --genome=hg19 --fasta=hg19.fa --genes=hg19-filtered-ensembl.gtf \
+                     --genome=mm10 --fasta=mm10.fa --genes=mm10-filtered-ensembl.gtf
+  ```
+
+  
 
 ## Feature Barcoding technology分析
 
 输出结果是几个barcode矩阵，其中包含了每个细胞的barcode和基因的表达信息
 
+1. 首先程序从特征库文件中提取和校正barcode序列和UMI序列
+2. 接着将这些barcode序列与声明的特征文件中的序列进行比对，最终得到每个特征码的数目
+
 #### 参数说明
 
-+ **	==CSV** :申明数据来源，在csv文件中需要有两中类型的fastq文件，一个是标准的gene expression reads另一个是Feature Reference reads文件；文件中声明
++ **libraries==CSV** :申明数据来源，在csv文件中需要有两中类型的fastq文件，一个是标准的gene expression reads另一个是Feature Reference reads文件；文件中声明
   + fastqs文件所在目录
   + 样品名称
   + 文库类型
-
+  + 一种是标准的单细胞基因表达reads文库
+    + 另外一种是特征barcoding reads文库就包括**Antibody Capture**、 **CRISPR Guide Capture** 
+  
 + **--feature-ref=CSV** : 声明使用到的Barcode 试剂的类型
   + ID：给barcode指定编号，不要与基因名字冲突
   + name 
