@@ -107,7 +107,7 @@ app.engine('art', require('express-art-template'))
   			comments:comments
   		})
   })
-   ```
+  ```
 
   当请求根目录时候，响应对象会去读取views目录的上一级目录的index.html文件，文件后缀是html而不是**art**的原因是因为在设置express模板引擎的时候，设置好了，第二个参数用于模板数据的填充与art-template模板的用法是一致的
 
@@ -124,8 +124,8 @@ app.engine('art', require('express-art-template'))
 
 		1. 基于express-art-template模板引擎
   		2. render中封装好了文件读取函数，和模板替换，模板文件的读取默认相对于views目录
-  		3.  请求对象req中封装好了get参数，不需要使用url模块进行操作了
-  		4.  响应对象封装好了重定向函数，不需要http的Location函数了
+    		3.  请求对象req中封装好了get参数，不需要使用url模块进行操作了
+      		4.  响应对象封装好了重定向函数，不需要http的Location函数了
 
 ### 基于POST请求实现留言板
 
@@ -159,6 +159,8 @@ app.post('/views/comments',function(req,res){
 		res.send()
 })
 ```
+
+
 
 
 
