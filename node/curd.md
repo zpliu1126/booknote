@@ -238,7 +238,7 @@ exports.saveStudent=function(student,callback){
     		var updateitem=students.find(function(item){
     			return item.id===updateByID.id 
     		})
-    		for(var key in updateitem){
+    		for(var key in updateitem){ //这里遍历的时候，当添加了新的数据项的时候需要换成提交的表单栏
     			updateitem[key]=updateByID[key]
     		}
     		var filedata=JSON.stringify({

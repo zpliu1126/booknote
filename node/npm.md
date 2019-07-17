@@ -59,7 +59,7 @@ module.exports = template;//最后导出的名字
 
 
 
-### :rescue_worker_helmet:常用的nom，命令
+### :rescue_worker_helmet:常用的npm，命令
 
 ​	
 
@@ -87,3 +87,17 @@ cnpm install art-template
 
 ```
 
+### package.json与package-lock.json文件区别
+
+  + package.json
+
+    文件中记录了你需要安装的模块，例如当安装express模块时：
+
+    npm 首先安装express模块，之后根据express文件夹中的package.json去下载对应的依赖
+
+  + package-lock.json
+
+    + 锁住版本
+    + 更快的安装依赖信息
+
+    文件中保存了所有依赖包的下载信息，就不用一步一步去分析模块中的依赖关系，从文件名字来看有一个lock就是锁定对应的版本，当你项目进行迁移的时候package-lock.json文件会告诉npm去下载对应的版本；而package.json文件默然是下载最新版本。
