@@ -1,0 +1,23 @@
+{
+  "name": "booknote",
+  "version": "1.0.0",
+  "description": "markdownToHtml",
+  "main": "no",
+  "scripts": {
+    "test": "no"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zpliu1126/booknote.git"
+  },
+  "author": "zpliu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zpliu1126/booknote/issues"
+  },
+  "homepage": "https://github.com/zpliu1126/booknote#readme",
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "marked": "^0.7.0"
+  }
+}
