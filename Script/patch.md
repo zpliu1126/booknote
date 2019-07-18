@@ -188,7 +188,9 @@ python patch.py 基因fasta序列文件 输出结果文件
 
 + ### 转换格式后的文件
 
-  ![转换格式后](./img/@@85[Z8SN_YO@`@%Z]QYV2.png)
+  ![转换格式后](./img/%40%4085%5BZ8SN_YO%40%60%40%25Z%5DQYV2.png)
+
+  
 
   
 
