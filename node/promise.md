@@ -50,7 +50,33 @@ fs.readFile("a.txt",function(err,data){
 
 **为了解决回调嵌套的问题，ES6中新增了promise API解决这个问题**
 
+```javascript
+var p1=new Promise(function(resolve,reject){
+	teacher1.save(function(err,data){
+	if(err){
+		reject(err)
+		}
+		resolve(data)
+	})
+})
 
+p1
+	.then(
+	function(){
+	var query=teacher_Col.where({name:"zpliu"})
+	query.deleteMany(function(err,data){
+	if(err){
+		console.log("删除失败"+err)
+	}
+		console.log("删除成功")
+	})}
+)
+```
 
+### 具体实现
 
+	+ 首先定义一个Promise对象，对象中的函数会立即执行，函数有两个回调函数用于接收执行程序中的结果或报错信息
+	+ **resolve**&**reject**
+	+ Promise对象使用then方法可以获取程序的执行结果并且进入下一个依赖的程序
+	+ then函数的参数都是可选的，即可以不看Promise对象的执行结果直接执行下一个程序，也可以给函数一个data参数，获取Promise对象执行成功后的数据
 
