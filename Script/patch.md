@@ -2,7 +2,7 @@
 
 > 今天想要分析转录因子结合位点的数据，使用http://gene-regulation.com/cgi-bin/pub/programs/patch/bin/patch.cgi网站进行预测，但由于该网站不提供文件上传的功能，同时每次进行处理的数据量有上限，想到我又得点击几百次鼠标的操作就头大；于是参考别人的博客写下一个爬虫
 
-脚本地址（./patch.tar.gz)
+脚本下载地址（https://github.com/zpliu1126/booknote/raw/master/Script/patch.tar.gz)
 
 **用法**
 
