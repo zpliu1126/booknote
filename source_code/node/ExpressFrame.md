@@ -17,7 +17,7 @@ npm init -y
 npm install --save express
 ```
 
-### 2.hello world
+### 2. hello world
 
 
 
@@ -124,7 +124,7 @@ app.engine('art', require('express-art-template'))
 
 		1. 基于express-art-template模板引擎
   		2. render中封装好了文件读取函数，和模板替换，模板文件的读取默认相对于views目录
-        		3.  请求对象req中封装好了get参数，不需要使用url模块进行操作了
+                		3.  请求对象req中封装好了get参数，不需要使用url模块进行操作了
             		4.  响应对象封装好了重定向函数，不需要http的Location函数了
 
 ### 基于POST请求实现留言板

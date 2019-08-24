@@ -315,3 +315,44 @@ exports.saveStudent=function(student,callback){
 ## 最后的效果就在这张图片上了
 
 ![](./img/学生信息的增删改查.png)
+
+
+
+### 之前的对数据库的增删改查都只能将某一个字段给写死了进行查询
+
+​	为了能够让封装好的函数能够尽可能的自由使用某一个表头进行查询， 对findOne函数进行了进一步的封装
+
+```javascript
+findOne=function(table,useraccount,callback){
+	var jsonObj={}
+	jsonObj[table]=useraccount
+	var query=UserCol.where(jsonObj)
+	query.findOne(function(err,data){
+		if(err){
+			callback(err)
+		}
+		else{
+			callback(null,data)
+		}
+	})
+}
+```
+
+**查询条件是一个json对象，只需要在函数中传递json的key值即可**
+
+原版的封装函数感觉弱鸡了一些
+
+```javascript
+exports.findOne=function(useraccount,callback){
+	var query=UserCol.where({account:useraccount})
+	query.findOne(function(err,data){
+		if(err){
+			callback(err)
+		}
+		else{
+			callback(null,data)
+		}
+	})
+}
+```
+

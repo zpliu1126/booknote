@@ -126,5 +126,19 @@
   
   ```
 
-  
+
+### 数据库备份
+
+
+
+```sql
+mongodump  -d admin -o /var/www/html/node/static/data/dump/ -u zpliu -p mysql --authenticationDatabase admin
+```
+
++ -d 选择要备份的数据库
++ -o 保存数据的目录
++ -u 进行认证
++ 后面的authenticationDatabase 是保存了用户认证信息的数据库
+
+**不知道为什么，开启认证模式不好备份我之间用非认证模式进行备份**
 

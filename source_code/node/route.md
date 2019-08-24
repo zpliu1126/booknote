@@ -126,5 +126,27 @@ app.listen(8080,function(){
 
 ​	
 
-### 定制404页面
+### 多路由挂载
+
+​	在有很多种页面时，针对不同的页面设计不同的路由文件，将所有的路由文件放在同一个文件夹下面方便管理与维护
+
+```javascript
+./configure/
+|-- app.js
+|-- route.js
+|-- router
+|   |-- studenter_router.js
+|   `-- teacher_router.js
+|-- students.js
+`-- teacher.js
+
+#在router文件夹中配置了两种类型的路由文件，然后在app.js中进行引用即可
+## app.js
+var studenter_router=require("./router/studenter_router.js")//路由文件
+var teacher_router=require("./router/teacher_router.js")//路由文件
+```
+
+
+
+
 

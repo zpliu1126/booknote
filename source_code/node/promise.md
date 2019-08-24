@@ -4,7 +4,8 @@
 
 
 
-
+[阮大神的总结](http://javascript.ruanyifeng.com/advanced/promise.html)
+[es6中讲解](https://es6.ruanyifeng.com/#docs/promise)
 
 #### 回调地狱
 
@@ -75,8 +76,8 @@ p1
 
 ### 具体实现
 
-	+ 首先定义一个Promise对象，对象中的函数会立即执行，函数有两个回调函数用于接收执行程序中的结果或报错信息
-	+ **resolve**&**reject**
-	+ Promise对象使用then方法可以获取程序的执行结果并且进入下一个依赖的程序
-	+ then函数的参数都是可选的，即可以不看Promise对象的执行结果直接执行下一个程序，也可以给函数一个data参数，获取Promise对象执行成功后的数据
++ 首先定义一个Promise对象，对象中的函数会立即执行，函数有两个回调函数用于接收执行程序中的结果或报错信息
++ **resolve**&**reject**
++ Promise对象使用then方法可以获取程序的执行结果并且进入下一个依赖的程序
++ then函数的参数都是可选的，即可以不看Promise对象的执行结果直接执行下一个程序，也可以给函数一个data参数，获取Promise对象执行成功后的数据
 
