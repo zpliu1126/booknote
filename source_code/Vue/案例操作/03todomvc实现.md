@@ -244,18 +244,16 @@ sublimer代码折叠 `ctrl +shift+{`
   			todos:todoStorage.fetch(),
 		},
   
+  ```
+
 watch:{
   			todos:{
 				deep:true, //对引用类型数据进行深度监视
   				handler:todoStorage.save //默认将新的值放在函数第一个参数位置，旧值在第二个位置
 			}
   		},
-```
-  
-  
-  
-  
-  
+
+
 + 按条件显示条目
 
   + 定义一个钩子对象
@@ -263,8 +261,9 @@ watch:{
   + 定义一个状态变量
 
   + 绑定点击事件,修改对应的状态变量
-  
-    ```javascript
+
+```javascript
+
     //钩子函数
     var filters={
     	all:function(todos){
@@ -284,10 +283,28 @@ watch:{
     					return filters[this.filterText](this.todos);
   				}
     			}
+```
+
+​    
+
++ 使用自定义指定，获得焦点
+
+  使用Vue.directive函数定义自定义指令，，然后将指令绑定到DOM元素上，尽可能的减少DOM的操作
+
+  ```javascript
+// 注册全局指令
+  Vue.directive("focus",{
+  	inserted:function(el,bind){ //在被绑定元素插入到父元素时，调用聚焦事件
+  		el.focus()
+  	}
+  
+  })
   ```
   
-    
   
+  
++ 
+
 + 
 
   ​			
