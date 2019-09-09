@@ -68,3 +68,23 @@ methods: {
 `import { Toast } from 'mint-ui';`
 
 **Toast函数**的调用会返回一个对象，它可以通过close方法将Toast提示框进行关闭
+
+
+
+### 3. vue-resource全局配置
+
+`Vue.http.options.root = '/root';`
+
+之后再使用vue-resource去请求资源时不用写头部冗余的信息了
+
+`this.$http.get('http://www.zpliublog.club:8080/API')`
+
+等同于 **最前面不用加路径符号**
+
+```javascript
+Vue.http.options.root = '/root';
+this.$http.get('API')
+```
+
+
+

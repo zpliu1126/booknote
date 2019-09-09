@@ -24,9 +24,9 @@
 
 ### 2.webpack中配置插件
 
-	+ 使用VueLoadPlugin 插件
-	+ 定制loader规则
-	+ 引用插件
++ 使用VueLoadPlugin 插件
++ 定制loader规则
++ 引用插件
 
 ```javascript
 //webpack需要xue插件
