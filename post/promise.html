@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>promise</title>
+  <link rel="stylesheet" href="./../stytle/github.css">
+</head>
+<body>
+<h1 id="promise-">Promise 异步编程</h1>
+<p><img src="https://s3.amazonaws.com/com.twilio.prod.twilio-docs/images/Screen-Shot-2017-03-06-at-5.11.06-PM.width-808.png" alt="ãcallback hellãã®ç»åæ¤ç´¢çµæ"></p>
+<h4 id="-">回调地狱</h4>
+<p>​    不能够保证异步编程的执行顺序，例如读取不同的文件</p>
+<pre><code class="lang-javascript">fs.readFile(&quot;a.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+})
+fs.readFile(&quot;b.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+})
+fs.readFile(&quot;c.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+})
+</code></pre>
+<p>为了固定文件的读取顺序，可以在异步读取中进行嵌套</p>
+<pre><code class="lang-javascript">fs.readFile(&quot;a.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+    fs.readFile(&quot;b.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+        fs.readFile(&quot;a.txt&quot;,function(err,data){
+    if(err){
+        throw(err)
+    }
+})
+})
+})
+</code></pre>
+<p><strong>为了解决回调嵌套的问题，ES6中新增了promise API解决这个问题</strong></p>
+<pre><code class="lang-javascript">var p1=new Promise(function(resolve,reject){
+    teacher1.save(function(err,data){
+    if(err){
+        reject(err)
+        }
+        resolve(data)
+    })
+})
+
+p1
+    .then(
+    function(){
+    var query=teacher_Col.where({name:&quot;zpliu&quot;})
+    query.deleteMany(function(err,data){
+    if(err){
+        console.log(&quot;删除失败&quot;+err)
+    }
+        console.log(&quot;删除成功&quot;)
+    })}
+)
+</code></pre>
+<h3 id="-">具体实现</h3>
+<ul>
+<li>首先定义一个Promise对象，对象中的函数会立即执行，函数有两个回调函数用于接收执行程序中的结果或报错信息</li>
+<li><strong>resolve</strong>&amp;<strong>reject</strong></li>
+<li>Promise对象使用then方法可以获取程序的执行结果并且进入下一个依赖的程序</li>
+<li>then函数的参数都是可选的，即可以不看Promise对象的执行结果直接执行下一个程序，也可以给函数一个data参数，获取Promise对象执行成功后的数据</li>
+</ul>
+</body>
+</html>
