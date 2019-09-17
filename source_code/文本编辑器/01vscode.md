@@ -61,7 +61,19 @@
 
   ` ctrl + - | ctrl + =`
 
+  + 复制当前行
   
+    向上复制`Alt shift + ​`:arrow_up:
+  
+    向下复制 `Alt shift +` :arrow_down:
+  
+  + 注释与取消注释
+  
+    `ctrl +k`进入注释模式
+  
+    `ctrl +c `注释光标所在行
+  
+    `ctrl + u` 去除注释所在行
 
 
 
