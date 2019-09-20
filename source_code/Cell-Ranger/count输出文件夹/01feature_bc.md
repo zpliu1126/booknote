@@ -6,7 +6,9 @@
 
   文件中存储了从所有设计的barcode中识别到的barcode
 
-+ 文件格式如下
++ 
+
++ **features.tsv**文件格式如下
 
   ```shell
   Ghir_A01G000010 Ghir_A01G000010 Gene Expression
