@@ -46,7 +46,20 @@
 
 + 模糊查询
 
-  
+  + like 一般与通配符搭配使用
+
+    `%`匹配任意多个字符，并且`like`不区分大小写
+
+    `_`匹配任意一个字符,类似占位符的功能
+
+    ```mysql
+    SELECT * FROM websites WHERE name like 'g%' ;
+    # alexa	country	id	name	url
+    # 1	USA	1	Google	https://www.google.cm/
+    
+    ```
+
+    
 
 + 
 
