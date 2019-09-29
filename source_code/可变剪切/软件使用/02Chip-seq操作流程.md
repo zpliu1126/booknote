@@ -4,6 +4,13 @@
 
    可以参考我RNA-seq篇章中关于Trimmomatic的使用
 
+   
+
 2. Bowtie2进行比对
 
+   + 软件安装
+
+     
+
    
+
