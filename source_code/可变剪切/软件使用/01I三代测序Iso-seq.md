@@ -1,5 +1,9 @@
 ### PacBio三代全长转录组测序
 
+分析流程
+
+![分析流程](https://github.com/Magdoll/images_public/raw/master/github_isoseq3_wiki_figures/IsoSeq3_workflow_v3.png)
+
 1. ### 安装SMART软件
 
    从网站https://www.pacb.com/support/software-downloads/下载SMART-Link软件
@@ -67,7 +71,7 @@
 
    ` lima output.bam  primers.fasta demux.ccs.bam --isoseq --no-pbi -j 线程数 --min-length 300` 
 
-   3.2 去除full length 的噪音
+   3.2 去除full length 的噪音remove  polyA tails
 
    ```bash
    #v7版本的命令
@@ -170,11 +174,59 @@
    pip install Biopython  --user
    ```
 
-   
+   运行tama_collapse.py 脚本
+
+   ```bash
+   /usr/bin/python tama_collapse.py  -s ../gmap_sort.sam  -f ../../Gr_genome/Graimondii_221_v2.0.fa    -p tama -x capped
+   ```
+
+   每个参数的详细说明 https://github.com/GenomeRIK/tama/wiki/Tama-Collapse
 
    
 
-6. 
+6. Cupcake去除冗余，这个步骤和5是一样的 **推荐这个流程**
+
+   6.1 安装Cupcake软件
+
+   首先得安装cogent环境 https://github.com/Magdoll/Cogent/wiki/Installing-Cogent#conda
+   
+   ```bash
+   ## 创建anaCogent环境
+   conda create --name anaCogent python=2.7 anaconda
+   ## 进入anaCogent环境
+   conda activate anaCogent
+   ## 安装依赖
+   conda install -n anaCogent biopython -y
+   conda install -n anaCogent -c bcbio bx-python -y
+   conda install -n anaCogent -c conda-forge pulp -y
+   ## 安装cogent
+   cd <your_dir>
+   git clone https://github.com/Magdoll/Cogent.git
+   cd Cogent
+   git checkout 
+   git submodule update --init --recursive
+   cd  Complete-Striped-Smith-Waterman-Library/src
+   make
+   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<your_dir>/Cogent/Complete-Striped-Smith-Waterman-Library/src
+   export PYTHONPATH=$PYTHONPATH:<your_dir>/Cogent/Complete-Striped-Smith-Waterman-Library/src
+   cd ../../
+   python setup.py build
+   python setup.py install
+   ## 可以将export两行命令加入到.bashrc文件中
+   
+   
+   ## 开始安装cupcake
+   git clone https://github.com/Magdoll/cDNA_Cupcake.git
+   cd cDNA_Cupcake/
+   python setup.py build
+   python setup.py install
+   ```
+   
+   
+   
+   
+   
+   
 
 
 
@@ -201,3 +253,5 @@ GMap软件 http://research-pub.gene.com/gmap/
 samtools输出文件格式 https://blog.csdn.net/genome_denovo/article/details/78712972
 
 全长转录本分类https://github.com/GenomeRIK/tama/wiki/Tama-Collapse
+
+Cupcake分析流程 https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#what
