@@ -243,6 +243,55 @@
    
    参考 https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU%3A-supporting-scripts-for-Iso-Seq-after-clustering-step#what
    
+   ```bash
+   ## 将Gmap得到的sam结果文件进行排序
+   sort -k 3,3 -k 4,4n gmap.sam >gmap_sorted.sam
+   ## 结合gmap的比对结果去除冗余的转录本
+   collapse_isoforms_by_sam.py --input polished.hq.fastq --fq  -s gmap_sorted.sam -o tama/test --dun-merge-5-shorter -c 0.95 -i 0.85
+   ```
+   
+   + --input 输入文件
+   + --fq 指定输入文件为fastq
+   + -s Gmap输出后的sam文件经过sorted
+   + -o 输出文件前缀，当然也可以加目录，直接输出到对应目录下
+   + -c 最小覆盖度
+   + -i 相似度
+   + --dun-merge-5-shorter  5‘端的read由于测序的原因可能是真是存在差别，也可能是冗余；跟建库方式有关；因为设计引物数利用ployA的，所以5’端的序列可能没有完全扩到
+   
+   **过滤因为5’端测序的误差，导致冗余没有完全去除**
+   
+   ```bash
+   filter_away_subset.py test.collapsed
+   ```
+   
+   **Alternative splice.py**脚本进行分类
+   
+   ```bash
+   git clone https://github.com/liangfan01/pipeline-for-isoseq.git --depth 1
+   ## 脚本在other目录下，依赖于python2
+   ## 先退出conda，回到bash下
+   conda deactive
+   ## 安装依赖包
+   pip2 install svgwrite --user
+   pip2 install networkx --user 
+   ## 我的python环境被污染了，只能指定对应的python
+   /usr/bin/python alternative_splice.py -i gffwenj  -g 参考基因组文件gtf文件 -f 参考基因组文件  -o 输出路径 -os -as -ats T -op
+   ```
+   
+   :warning:alternative_splice.py脚本中使用的参考基因组的gtf文件还需要使用awk，进行转化
+   
+   ```bash
+   awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $11 " " $12 " " $9 " " $10}' cufflinks转化后的gtf文件 >最后可以使用的gtf文件
+   ```
+   
+   
+   
+   ### 7.预测开放阅读框
+   
+   
+   
+   
+   
    
    
    
