@@ -37,15 +37,40 @@
      samtools rmdup 排好序的bam文件 rmdup.bam文件
      ```
      
-     
-     
-     
-     
-     
-     
+   
+3. 使用MACS进行比对
+
+   3.1 软件安装
+
+   https://github.com/taoliu/MACS/blob/master/INSTALL.md
+
+   ```bash
+   ## 使用Anconda进行安装
+   conda create --name MACS
+   conda activate MACS
+conda install -c bioconda macs2
+   ## 离开环境
+conda deactivate
+   ```
+   
+   3.2 软件使用
+   
+   ```bash
+   macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.05
+   ```
+   
+   + -t 接处理文件
+   + -c 控制文件
+   + -f 输入文件格式
+   + -g 根据比对时canker基于组的大小而定
+   + -n 输出文件名前缀
+   + -B -q FDR值
+   
+   
 ### 参考
 
 1. samtools使用 https://www.cnblogs.com/emanlee/p/4316581.html
+2. MACS软件 https://github.com/taoliu/MACS/
 
 
 
