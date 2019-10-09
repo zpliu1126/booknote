@@ -29,7 +29,7 @@
    export PATH=" /public/home/zpliu/software/smrtlink/smrtcmds/bin:$PATH"
    ```
 
-2. 使用**CCS**对原始数据进行过滤
+2. ### 使用**CCS**对原始数据进行过滤
 
    ```bash
    ccs 
@@ -55,7 +55,7 @@
    + **-reportFile** 报告处理的文件
    + **maxDropFraction**  Maximum fraction of subreads dropped by polishing
    
-3. 对转录本进行无参考基因组的归类
+3. ### 对转录本进行无参考基因组的归类
 
    引物文件是固定的
 
@@ -90,7 +90,7 @@
 
    ` isoseq3 polish unpolished.bam movie.subreads.bam polished.bam`
 
-4. 比对到参考基因组
+4. ### 比对到参考基因组
 
    4.1 软件安装
 
@@ -146,7 +146,7 @@
    + "X"表示错误匹配到序列上
      
 
-5. TaMa将很相似的转录本合并**去冗余**
+5. ### TaMa将很相似的转录本合并**去冗余**
 
    ![合并转录本](https://github.com/GenomeRIK/tama/raw/master/images/Collapse1.png)
 
@@ -184,9 +184,9 @@
 
    
 
-6. Cupcake去除冗余，这个步骤和5是一样的 **推荐这个流程**
+6. ### Cupcake去除冗余，这个步骤和5是一样的 **推荐这个流程**
 
-   6.1 安装Cupcake软件
+   6.1 安装Cupcake软件，这个流程适合依赖于python2的cupcake，应该克隆对应的**Py2_v8.7.x.** 分支
 
    首先得安装cogent环境 https://github.com/Magdoll/Cogent/wiki/Installing-Cogent#conda
    
@@ -214,13 +214,44 @@
    python setup.py install
    ## 可以将export两行命令加入到.bashrc文件中
    
-   
-   ## 开始安装cupcake
-   git clone https://github.com/Magdoll/cDNA_Cupcake.git
+   ## 开始安装cupcake，选择对应的Py2_v8.7.x. 分支
+   git clone -b Py2_v8.7.x  https://github.com/Magdoll/cDNA_Cupcake.git
    cd cDNA_Cupcake/
    python setup.py build
    python setup.py install
    ```
+   
+   6.2 安装依赖于python3.7环境的cupcake
+   
+   参考 https://github.com/Magdoll/cDNA_Cupcake/tree/master
+   
+   ```bash
+   conda create --name Cupcake python=3.7 
+   conda activate Cupcake 
+   conda install Biopython 
+   git clone = https://github.com/Magdoll/cDNA_Cupcake.git
+   ##添加到环境变量
+   export PATH=$PATH:<path_to_Cupcake>/sequence/
+   export PATH=$PATH:<path_to_Cupcake>/rarefaction/ ## 这不找不到，不加了
+   cd cDNA_Cupcake/
+   python setup.py build
+   python setup.py install
+   collapse_isoforms_by_sam.py -h
+   ```
+   
+   #### 6.3 具体的使用方法
+   
+   参考 https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU%3A-supporting-scripts-for-Iso-Seq-after-clustering-step#what
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    
    
    
