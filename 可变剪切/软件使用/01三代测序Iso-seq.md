@@ -8,7 +8,7 @@ https://github.com/PacificBiosciences/IsoSeq/blob/master/README_v3.1.md
 
 这张图片形象的展示了每一步测序数据的变化
 
-![测序说明](https://github.com/PacificBiosciences/IsoSeq/blob/master/doc/img/isoseq3.1-workflow.png)
+![测序说明](https://user-images.githubusercontent.com/39325949/66532093-b8a89100-eb40-11e9-8163-4a382a1afb53.png)
 
 ### 1.安装SMART软件
 
