@@ -270,7 +270,8 @@ collapse_isoforms_by_sam.py --input polished.hq.fastq --fq  -s gmap_sorted.sam -
 filter_away_subset.py test.collapsed
 ```
 
-**Alternative splice.py**脚本进行分类
+
+### 7.Alternative splice.py脚本进行分类
 
 ```bash
 git clone https://github.com/liangfan01/pipeline-for-isoseq.git --depth 1
@@ -292,7 +293,7 @@ awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $11 
 
 
 
-### 7.预测开放阅读框
+### 8.预测开放阅读框
 
 
 
@@ -317,3 +318,5 @@ samtools输出文件格式 https://blog.csdn.net/genome_denovo/article/details/7
 全长转录本分类https://github.com/GenomeRIK/tama/wiki/Tama-Collapse
 
 Cupcake分析流程 https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#what
+
+去除冗余之后的分析流程 https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/What-to-do-after-Iso-Seq-Cluster%3F
