@@ -88,6 +88,10 @@ macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.05
 
 + `NAME_model.r` 画图的R脚本  `$ Rscript NAME_model.r`
 
++ `TheNAME_treat_pileup.bdg` 对应处理样品的数据
+
++ `NAME_control_lambda.bdg` 对应对照样品的数据 `bdgcmp`命令能够对着两个文件进行比较
+
 ### 4. call peaks统计每个区域的峰值
 
 
