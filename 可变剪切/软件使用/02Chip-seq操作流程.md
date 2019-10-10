@@ -66,6 +66,28 @@ macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.05
 + -n 输出文件名前缀
 + -B -q FDR值
 
+3.3 解读输出文件
+
++ `NAME_peaks.xls`文件每个峰的起始位置，和其他统计信息
+
++ `NAME_peaks.narrowPeak`  BED6+4格式，可以在USCS基因组浏览器中打开它
+
+  前几列的信息比较好理解，这是后几列的具体信息
+
+  - 5th: integer score for display. It's calculated as `int(-10*log10pvalue)` or `int(-10*log10qvalue)` depending on whether `-p` (pvalue) or `-q` (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in [UCSC ENCODE narrowPeak format](https://genome.ucsc.edu/FAQ/FAQformat.html#format12). You can let the value saturated at 1000 (i.e. p/q-value = 10^-100) by using the following 1-liner awk: `awk -v OFS="\t" '{$5=$5>1000?1000:$5} {print}' NAME_peaks.narrowPeak`
+  - 7th: fold-change at peak summit
+  - 8th: -log10pvalue at peak summit
+  - 9th: -log10qvalue at peak summit
+  - 10th: relative summit position to peak start
+
++ `NAME_summits.bed` 相当于`NAME_peaks.narrowPeak`文件的精简版
+
++ `NAME_peaks.broadPeak` 在`--broad`模式下才会生成
+
++ `NAME_peaks.gappedPeak` 在`--broad`模式下才会生成
+
++ `NAME_model.r` 画图的R脚本  `$ Rscript NAME_model.r`
+
 ### 4. call peaks统计每个区域的峰值
 
 
