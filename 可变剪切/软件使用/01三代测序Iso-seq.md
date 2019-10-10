@@ -2,7 +2,13 @@
 
 分析流程
 
+https://github.com/PacificBiosciences/IsoSeq/blob/master/README_v3.1.md
+
 ![分析流程](https://github.com/Magdoll/images_public/raw/master/github_isoseq3_wiki_figures/IsoSeq3_workflow_v3.png)
+
+这张图片形象的展示了每一步测序数据的变化
+
+![测序说明](https://github.com/PacificBiosciences/IsoSeq/blob/master/doc/img/isoseq3.1-workflow.png)
 
 ### 1.安装SMART软件
 
