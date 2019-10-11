@@ -94,7 +94,7 @@ AAGCAGTGGTATCAACGCAGAGTAC
 
 3.4打磨 polich
 
-` isoseq3 polish unpolished.bam movie.subreads.bam polished.bam`
+` isoseq3 polish -j 20 unpolished.bam input_subreads.bam polished.bam`
 
 ### 4.比对到参考基因组
 
