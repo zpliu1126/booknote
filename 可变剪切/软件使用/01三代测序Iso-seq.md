@@ -90,7 +90,7 @@ AAGCAGTGGTATCAACGCAGAGTAC
 
 ` isoseq3 cluster movie.flnc.bam unpolished.bam --verbose`
 
-:warning: 如果想要比较同源基因之间的差异的话，这一步可以不做
+:warning:~~如果想要比较同源基因之间的差异的话，这一步可以不做~~
 
 3.4打磨 polich
 
