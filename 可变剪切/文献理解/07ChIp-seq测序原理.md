@@ -49,7 +49,7 @@
 
 一般来说富集倍数5才算显著富集，也就是与对照相比在某个位置相比存在5倍差异
 
-![富集比例](https://zpliu1126.github.io/-figureBed/14720037-edd01f174024d523 (1).webp)
+<img src="https://zpliu1126.github.io/-figureBed/14720037-edd01f174024d523 (1).webp" alte="富集比"/>
 
 
 
