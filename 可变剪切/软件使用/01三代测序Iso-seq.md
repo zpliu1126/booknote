@@ -116,7 +116,7 @@ gmap_build -D 存放索引的目录 -d G.arboreum.Chr.v1.0 基因组fasta文件
 4.3 将全长转录本比对到参考基因组
 
 ```bash
-gmap -D 索引所在目录 -d 索引文件前缀 -f smase -t 10 -n 2 polished.hq.fasta >gmap.sam 2>gmap.err 
+gmap -D 索引所在目录 -d 索引文件前缀 -f samse -t 10 -n 2 polished.hq.fasta >gmap.sam 2>gmap.err 
 ```
 
 + -f 输出文件为sam格式
