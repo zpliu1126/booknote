@@ -280,7 +280,7 @@ conda deactive
 pip2 install svgwrite --user
 pip2 install networkx --user 
 ## 我的python环境被污染了，只能指定对应的python
-/usr/bin/python alternative_splice.py -i gffwenj  -g 参考基因组文件gtf文件 -f 参考基因组文件  -o 输出路径 -os -as -ats T -op
+    /usr/bin/python alternative_splice.py -i gfffile  -g 参考基因组文件gtf文件 -f 参考基因组文件  -o 输出路径 -os -as -ats T -op
 ```
 
 :warning:alternative_splice.py脚本中使用的参考基因组的gtf文件还需要使用awk，进行转化
