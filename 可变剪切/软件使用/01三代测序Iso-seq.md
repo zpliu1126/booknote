@@ -88,7 +88,7 @@ AAGCAGTGGTATCAACGCAGAGTAC
 
 3.3 聚类
 
-` isoseq3 cluster movie.flnc.bam unpolished.bam --verbose`
+` isoseq3 cluster movie.flnc.bam unpolished.bam ·	
 
 :warning:~~如果想要比较同源基因之间的差异的话，这一步可以不做~~
 
@@ -268,8 +268,19 @@ collapse_isoforms_by_sam.py --input polished.hq.fastq --fq  -s gmap_sorted.sam -
 filter_away_subset.py test.collapsed
 ```
 
+### 7.与已有的注释信息进行比较
 
-### 7.Alternative splice.py脚本进行分类
+ https://github.com/TomSkelly/MatchAnnot 
+
+```bash
+/usr/bin/python ~/software/MatchAnnot/matchAnnot.py  --gtf 已经发表的基因组gtf文化  --format alt gmap的比对结果sam文件需要按照染色体顺序排好序  >111 
+```
+
+
+
+
+
+### 8.Alternative splice.py脚本进行分类
 
 ```bash
 git clone https://github.com/liangfan01/pipeline-for-isoseq.git --depth 1
@@ -289,7 +300,26 @@ pip2 install networkx --user
 awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $11 " " $12 " " $9 " " $10}' cufflinks转化后的gtf文件 >最后可以使用的gtf文件
 ```
 
+#### 输出文件
 
+```bash
+$ tree
+.
+├── acceptor.list.txt
+├── alternative.splice.list.txt
+├── donor.list.txt
+├── error.orient.list.txt
+├── gene.cluster.picture
+├── novel.gene.list.txt
+├── proved.transcript.list.txt
+├── splice.ascode.list.txt
+├── splice.ascode.stat.txt
+├── transcript.cluster.list.txt
+├── unproved.gene.list.txt
+└── unproved.transcript.list.txt
+```
+
+ 
 
 ### 8.预测开放阅读框
 
