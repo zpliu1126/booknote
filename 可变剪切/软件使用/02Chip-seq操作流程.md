@@ -108,6 +108,7 @@ macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.05
 
 1. samtools使用 https://www.cnblogs.com/emanlee/p/4316581.html
 2. MACS软件 https://github.com/taoliu/MACS/
+3. Bedtools使用  https://www.jianshu.com/p/6c3b87301491 
 
 
 
