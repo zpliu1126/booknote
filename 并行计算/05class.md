@@ -42,10 +42,16 @@
   ./hello 错误用法
 ```
 #### who am I
++ 编译`mpigcc  -o hello  test5.c`
++ 运行`mpirun  -np 4 ~/ClassTest/05/hello`
+获取进程编号和进程数目
++ `MPI_Comm_rank(MPI_COMM_WORLD,&myid)`获取进程编号
++ `MPI_Comm_size(MPI_COMM_WORLD,&numprocs)`获取总的进程数目
+
 ```bash
   #include <stdio.h>
   #include "mpi.h"
-  main( int argc, char *argv[] )
+  int main( int argc, char *argv[] )
   {
     int  myid, numprocs;
     MPI_Init( &argc, &argv );
