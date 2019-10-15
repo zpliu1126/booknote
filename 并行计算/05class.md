@@ -12,6 +12,8 @@
 
 #### 使用openmpi
 
+安装参考地址 https://github.com/pmodels/mpich
+
 ```bash
   #源代码安装
    Sudo mkdir –p /opt/openmp/4.0.0_gcc
