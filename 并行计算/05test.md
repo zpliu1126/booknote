@@ -91,60 +91,65 @@
   #include <stdlib.h>
   #include <string.h>
   #include "mpi.h"
+  #define NUM_STEPS 1000001 //定义步长
   int main(int argc, char *argv[])
   {
     double step;
-    int num_steps = 100000; //定义步长
-    step = 1.0 / (double)num_steps;
+
     int numprocs, myid, source;
-    MPI_Status status;                    //定义接收消息状态
-    double pi = 0.0, sum[20], limits[20]; //存储进程计算结果的buffer
+    MPI_Status status;        //定义接收消息状态
+    double pi = 0.0, sum_T[20]; //存储进程计算结果的buffer
+    int limits[20];
     MPI_Init(&argc, &argv);
+    step = 1.0 / (double)NUM_STEPS;
     MPI_Comm_rank(MPI_COMM_WORLD, &myid);
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
     if (myid != 0)
     {
-      MPI_Recv(limits, 2, MPI_INT, 0, 99, MPI_COMM_WORLD, &status);
+      MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status); //limit为数组指针
       double x, sum = 0.0;
-      for (int i = *(*limits); i <= *(*limits + 1); i++)
+      for (int i = *limits; i <= *(limits + 1); i++)
       {
         x = (i - 0.5) * step;
         sum += 4.0 / (1.0 + x * x);
       }
-      *(*sum) = sum * step;
-      MPI_Send(sum, 2, MPI_INT, 0, 98, MPI_COMM_WORLD); //向0号进程发送计算过结果
+      *sum_T = *sum_T * step;
+      MPI_Send(sum_T, 1, MPI_INT, 0, 98, MPI_COMM_WORLD); //向0号进程发送计算过结果
     }
     else
     { /* myid == 0 */
       //余数和平均交给0号进程处理，剩下的平均分
       int avarge, remind;
       double x, sum = 0.0;
-      avarge = num_step / numprocs;
-      remind = num_step % numprocs;
+      avarge = NUM_STEPS / numprocs;
+      remind = NUM_STEPS % numprocs;
       for (int i = 1; i <= avarge + remind; i++)
       {
         x = (i - 0.5) * step;
         sum += 4.0 / (1.0 + x * x);
       }
+      printf("%f\n",sum);
       pi += sum * step;
       for (source = 1; source < numprocs; source++)
       {
         //根据进程id拆分步长,将需要处理的范围发给其他进程
-        *(*limits) = avarge + remind + 1 + (source - 1) * avarge;
-        *(*limits + 1) = avarge + remind + source * avarge;
-        MPI_Send(limits, 2, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
+        limits[0] = avarge + remind +1+ (source - 1) * avarge;
+        limits[1] = avarge + remind + source * avarge ;
+        MPI_Send(limits, 20, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
       }
       if (myid == 0)
       {
+        printf("%f\n",pi);
         for (source = 1; source < numprocs; source++)
         {
-          MPI_Recv(sum, 2, MPI_INT, source, 98, MPI_COMM_WORLD, &status);
-          pi += *(*sum);
+          MPI_Recv(sum_T, 2, MPI_INT, source, 98, MPI_COMM_WORLD, &status);
+          pi += *sum_T;
         }
         printf("%f\n", pi);
       }
-      MPI_Finalize();
     }
+    MPI_Finalize();
+  }
 ```
 
 
