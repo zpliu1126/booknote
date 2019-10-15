@@ -48,7 +48,7 @@
   }
   MPI_Finalize();
   }
-``` 
+```
 
 ### point to point 进程间通信
 
