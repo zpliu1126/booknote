@@ -88,48 +88,63 @@
 
 ```c
   #include <stdio.h>
+  #include <stdlib.h>
   #include <string.h>
   #include "mpi.h"
-  int main(int argc, char* argv[]) {
-  double step;
-  int num_step=100000;//定义步长
-  step = 1.0 / (double)num_steps; 
-  int numprocs, myid, source; 
-  MPI_Status status; //定义接收消息状态
-  double pi=0.0,sum[20],limits[20]; //存储进程计算结果的buffer          
-  MPI_Init(&argc, &argv); 
-  MPI_Comm_rank(MPI_COMM_WORLD, &myid); 
-  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-  if (myid != 0) {
-  MPI_Recv(limits,2,MPI_INT,0,99,MPI_COMM_WORLD,&status);
-
-  } else {/* myid == 0 */
-  //余数交给0号进程处理，剩下的平均分
-  int avarge,remind;
-  double x,sum;
-  avarge=num_step/numprocs;
-  remind=num_step%numprocs;
-  for(int i=1;i<=avarge+remind;i++){
-    x = (i - 0.5) * step; 
-    sum+=4.0 / (1.0 + x * x);
-  }
-  pi += sum * step;
-  for (source = 1; source < numprocs; source++) {
-  //根据进程id拆分步长,将需要处理的范围发给其他进程
-  *(*limits)=avarge+remind+1+(source-1)*avarge;
-  *(*limits+1)=avarge+remind+1+source*avarge;
-  MPI_Send(limits,2,MPI_INT,source,99,MPI_COMM_WORLD);//向其他进程发送计算的范围
-  }
-  if(myid != 0){
-    MPI_Recv(message,100,MPI_CHAR,0,90,MPI_COMM_WORLD,&status);
-    printf("%s\n",message);
-  }else{
-  for(source=1;source<numprocs;source++){
-    sprintf(message,"pint form 0 to%d\n",source);
-    MPI_Send(message,strlen(message)+1,MPI_CHAR,source,90,MPI_COMM_WORLD);}
-  }
-  MPI_Finalize();
-  }
+  int main(int argc, char *argv[])
+  {
+    double step;
+    int num_steps = 100000; //定义步长
+    step = 1.0 / (double)num_steps;
+    int numprocs, myid, source;
+    MPI_Status status;                    //定义接收消息状态
+    double pi = 0.0, sum[20], limits[20]; //存储进程计算结果的buffer
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    if (myid != 0)
+    {
+      MPI_Recv(limits, 2, MPI_INT, 0, 99, MPI_COMM_WORLD, &status);
+      double x, sum = 0.0;
+      for (int i = *(*limits); i <= *(*limits + 1); i++)
+      {
+        x = (i - 0.5) * step;
+        sum += 4.0 / (1.0 + x * x);
+      }
+      *(*sum) = sum * step;
+      MPI_Send(sum, 2, MPI_INT, 0, 98, MPI_COMM_WORLD); //向0号进程发送计算过结果
+    }
+    else
+    { /* myid == 0 */
+      //余数和平均交给0号进程处理，剩下的平均分
+      int avarge, remind;
+      double x, sum = 0.0;
+      avarge = num_step / numprocs;
+      remind = num_step % numprocs;
+      for (int i = 1; i <= avarge + remind; i++)
+      {
+        x = (i - 0.5) * step;
+        sum += 4.0 / (1.0 + x * x);
+      }
+      pi += sum * step;
+      for (source = 1; source < numprocs; source++)
+      {
+        //根据进程id拆分步长,将需要处理的范围发给其他进程
+        *(*limits) = avarge + remind + 1 + (source - 1) * avarge;
+        *(*limits + 1) = avarge + remind + source * avarge;
+        MPI_Send(limits, 2, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
+      }
+      if (myid == 0)
+      {
+        for (source = 1; source < numprocs; source++)
+        {
+          MPI_Recv(sum, 2, MPI_INT, source, 98, MPI_COMM_WORLD, &status);
+          pi += *(*sum);
+        }
+        printf("%f\n", pi);
+      }
+      MPI_Finalize();
+    }
 ```
 
 
