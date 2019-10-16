@@ -16,20 +16,16 @@
 
 ```bash
   #源代码安装
-   Sudo mkdir –p /opt/openmp/4.0.0_gcc
-   Mkdir build
-   Cd build
-   ../configure CC=gcc FC=gfortran CXX=g++
-   --prefix=/opt/openmp/4.0.0_gcc
-   Make –j4 //多线程编译
-   Make install (sudo )
-   # 加入环境变量
-  export MPI_LOC=/opt/openmpi/4.0.0_gcc
-  export MPI_LIB=$MPI_LOC/lib
-  export MPI_INCLUDE=$MPI_LOC/bin
-  export LD_LIBRARY_PATH=$MPI_LOC/lib:$LD_LIBRARY_PATH
-  PATH=$MPI_LOC/bin:$PATH 
-  export PATH
+  wget -c http://www.mpich.org/static/downloads/3.3.1/mpich-3.3.1.tar.gz
+  tar -xvzf mpich-3.3.1.tar.gz 
+  cd  mpich-3.3.1.tar.gz 
+  mkdir   build
+  ./configure --prefix=/public/home/zpliu/scripte/C/mpich-3.3.1/build 2>&1| tee c.txt
+  make 2>&1 | tee m.txt
+  make install 2>&1 | tee mi.txt
+  # 之后程序在build/bin/目录里
+  # 加入环境变量
+  export PATH="/public/home/zpliu/scripte/C/mpich-3.3.1/build/bin:$PATH"	
    ## 集群直接load
   module load mpi/openmpi/3.1.1rc1
 ```
