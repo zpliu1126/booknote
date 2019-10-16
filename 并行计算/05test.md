@@ -83,88 +83,99 @@
   }
 ```
 
-
 ### 多进程求pi
 
-```c
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include "mpi.h"
-  #define NUM_STEPS 1000001 //定义步长
-  int main(int argc, char *argv[])
-  {
-    double step;
-    int numprocs, myid, source;
-    MPI_Status status;        //定义接收消息状态
-    double pi=0.0,sum_tmp[10]; //存储进程计算结果的buffer
-    int limits[20];
-    step = 1.0 / (double)NUM_STEPS;
-    double x, sum = 0.0;
-    MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-    if (myid==0)
-    {
-     /* myid == 0 */
-      //余数和平均交给0号进程处理，剩下的平均分
-      int avarge, remind;
-      avarge = NUM_STEPS / numprocs;
-      remind = NUM_STEPS % numprocs;
-      for (int i = 1; i <= avarge + remind; i++)
-      {
-        x = (i - 0.5) * step;
-        sum += 4.0 / (1.0 + x * x);
-      }
-      sum_tmp[0]=sum*step; //0号进程计算的一部分结果
-      for (source = 1; source < numprocs; source++)
-      {
-        //根据进程id拆分步长,将需要处理的范围发给其他进程
-        limits[0] = avarge + remind +1+ (source - 1) * avarge;
-        limits[1] = avarge + remind + source * avarge ;
-      MPI_Send(limits, 20, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
-      }
-      MPI_Send(sum_tmp, 20, MPI_DOUBLE, numprocs-1, 97, MPI_COMM_WORLD); //向最后一个进程发送0号进程的计算结果
-    }
-    else if( myid<numprocs-1)
-    { 
-       MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status); //从0号进行收集计算的范围
-      for (int i = *limits; i <= *(limits + 1); i++)
-      {
-        x = (i - 0.5) * step;
-        sum += 4.0 / (1.0 + x * x);
-      }
-      sum_tmp[0] = sum * step;
-      // printf("%faa\n",sum * step);
-      MPI_Send(sum_tmp, 1, MPI_DOUBLE, numprocs-1, 98, MPI_COMM_WORLD); //向最后一个进行发送计算结果
-    }
++ 计算时间还不是很完善
++ 前期bug主要出现在消息传递过程中数据类型上`MPI_DOUBLE`
 
-    else 
-      {
-        MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status); //从0号进行收集计算范围
-        MPI_Recv(sum_tmp, 20, MPI_DOUBLE, 0, 97, MPI_COMM_WORLD, &status); //收集0号进程的计算结果
-        printf("%f\n",*sum_tmp);
-        printf("%d\n",*limits);
-        printf("%d\n",*(limits+1));
-        pi=*sum_tmp;
-        for (int i = *limits; i <= *(limits + 1); i++)
-          {
-            x = (i - 0.5) * step;
-            sum += 4.0 / (1.0 + x * x);
-          }
-        printf("%f2\n",pi);
-          pi+=sum*step;
-        printf("%f\n",pi);
-        for (source = 1; source < numprocs-1; source++)
-        {
-          MPI_Recv(sum_tmp, 1, MPI_DOUBLE, source, 98, MPI_COMM_WORLD, &status);
-          pi+=*sum_tmp;
-        }
-        printf("%f\n",pi);
-      }
-    MPI_Finalize();
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "mpi.h"
+#define NUM_STEPS 100000001 //定义步长
+int main(int argc, char *argv[])
+{
+  double step;
+  int numprocs, myid, source;
+  MPI_Status status;            //定义接收消息状态
+  double pi = 0.0, sum_tmp[10]; //存储进程计算结果的buffer
+  int limits[20];
+  step = 1.0 / (double)NUM_STEPS;
+  double x, sum,Starttime,Endtime ;
+
+  MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+  Starttime = MPI_Wtime(); //开始计时
+  if (myid == 0)
+  {
+    /* myid == 0 */
+    //余数和平均交给0号进程处理，剩下的平均分
+    int avarge, remind;
+    sum=0.0;//防止sum变量被其他进程污染
+    avarge = NUM_STEPS / numprocs;
+    remind = NUM_STEPS % numprocs;
+    for (int i = 1; i <= avarge + remind; i++)
+    {
+      x = (i - 0.5) * step;
+      sum += 4.0 / (1.0 + x * x);
+    }
+    sum_tmp[0] = sum * step; //0号进程计算的一部分结果
+    for (source = 1; source < numprocs; source++)
+    {
+      //根据进程id拆分步长,将需要处理的范围发给其他进程
+      limits[0] = avarge + remind + 1 + (source - 1) * avarge;
+      limits[1] = avarge + remind + source * avarge;
+      MPI_Send(limits, 20, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
+    }
+    MPI_Send(sum_tmp, 20, MPI_DOUBLE, numprocs - 1, 97, MPI_COMM_WORLD); //向最后一个进程发送0号进程的计算结果
+    Endtime = MPI_Wtime() ;  // 终止计时
+    printf("当前进程%d花费时间为:%1.2f\n",myid,Endtime-Starttime);
   }
-  
+  else if (myid < numprocs - 1)
+  {
+    MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status); //从0号进行收集计算的范围
+    //printf("%f\n",sum);
+    sum=0.0; //防止sum变量被其他进程污染
+    for (int i = *limits; i <= *(limits + 1); i++)
+    {
+      x = (i - 0.5) * step;
+      sum += 4.0 / (1.0 + x * x);
+    }
+    sum_tmp[0] = sum * step;
+    MPI_Send(sum_tmp, 1, MPI_DOUBLE, numprocs - 1, 98, MPI_COMM_WORLD); //向最后一个进行发送计算结果
+  Endtime = MPI_Wtime() ;  // 终止计时
+  printf("当前进程%d花费时间为:%1.2f\n",myid,Endtime-Starttime);
+  }
+
+  else
+  {
+  Starttime = MPI_Wtime(); //开始计时
+    MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status);     //从0号进行收集计算范围
+    MPI_Recv(sum_tmp, 20, MPI_DOUBLE, 0, 97, MPI_COMM_WORLD, &status); //收集0号进程的计算结果
+    sum=0.0; //防止sum变量被其他进程污染
+    for (int i =*limits; i <= *(limits+1); i++)
+    {
+      x = (i - 0.5) * step;
+      sum += 4.0 / (1.0 + x * x);
+    }
+    pi = sum * step+*sum_tmp; //加上0号进程和当前进程的计算结果
+    for (source = 1; source < numprocs - 1; source++)
+    {
+      MPI_Recv(sum_tmp, 1, MPI_DOUBLE, source, 98, MPI_COMM_WORLD, &status);
+      pi += *sum_tmp; //加上其他进程的计算结果
+    }
+    Endtime = MPI_Wtime() ;  // 终止计时
+   printf("当前进程%d花费时间为:%1.2f\n",myid,Endtime-Starttime);
+      printf("计算结果为:\t%1.5f\n",pi);
+  }
+
+  MPI_Finalize();
+
+}
 ```
 
 
