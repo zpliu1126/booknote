@@ -88,6 +88,7 @@
 + 计算时间还不是很完善
 + 前期bug主要出现在消息传递过程中数据类型上`MPI_DOUBLE`
 + 0号进程和最后一个进程，不仅仅承担了简单的加和同时也计算了pi值的一部分，避免了资源的浪费
++ 同一个进程不能同时sed与recv，会造成死锁
 
 ```c
 #include <stdio.h>
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
     /* myid == 0 */
     //余数和平均交给0号进程处理，剩下的平均分
     int avarge, remind;
-    sum=0.0;//防止sum变量被其他进程污染
+    //防止sum变量被其他进程污染
     avarge = NUM_STEPS / numprocs;
     remind = NUM_STEPS % numprocs;
     for (int i = 1; i <= avarge + remind; i++)
@@ -132,7 +133,11 @@ int main(int argc, char *argv[])
       limits[1] = avarge + remind + source * avarge;
       MPI_Send(limits, 20, MPI_INT, source, 99, MPI_COMM_WORLD); //向其他进程发送计算的范围
     }
-    MPI_Send(sum_tmp, 20, MPI_DOUBLE, numprocs - 1, 97, MPI_COMM_WORLD); //向最后一个进程发送0号进程的计算结果
+   if(numprocs==1){
+      printf("计算结果为:\t%1.5f\n", sum_tmp[0]);
+   }else{
+      MPI_Send(sum_tmp, 20, MPI_DOUBLE, numprocs - 1, 97, MPI_COMM_WORLD); //向最后一个进程发送0号进程的计算结果,只有一个进程会出bug
+   }
     Endtime = MPI_Wtime() ;  // 终止计时
     printf("当前进程%d花费时间为:%1.2f\n",myid,Endtime-Starttime);
   }
@@ -140,7 +145,7 @@ int main(int argc, char *argv[])
   {
     MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status); //从0号进行收集计算的范围
     //printf("%f\n",sum);
-    sum=0.0; //防止sum变量被其他进程污染
+     //防止sum变量被其他进程污染
     for (int i = *limits; i <= *(limits + 1); i++)
     {
       x = (i - 0.5) * step;
@@ -154,10 +159,11 @@ int main(int argc, char *argv[])
 
   else
   {
-  Starttime = MPI_Wtime(); //开始计时
+    //printf("%f\n",sum);
+   Starttime = MPI_Wtime(); //开始计时
     MPI_Recv(limits, 20, MPI_INT, 0, 99, MPI_COMM_WORLD, &status);     //从0号进行收集计算范围
     MPI_Recv(sum_tmp, 20, MPI_DOUBLE, 0, 97, MPI_COMM_WORLD, &status); //收集0号进程的计算结果
-    sum=0.0; //防止sum变量被其他进程污染
+     //防止sum变量被其他进程污染
     for (int i =*limits; i <= *(limits+1); i++)
     {
       x = (i - 0.5) * step;
@@ -170,13 +176,14 @@ int main(int argc, char *argv[])
       pi += *sum_tmp; //加上其他进程的计算结果
     }
     Endtime = MPI_Wtime() ;  // 终止计时
-   printf("当前进程%d花费时间为:%1.2f\n",myid,Endtime-Starttime);
-      printf("计算结果为:\t%1.5f\n",pi);
+   printf("当前进程%d花费时间为:%1.2f\n",numprocs-1,Endtime-Starttime);
+    printf("计算结果为:\t%1.5f\n",pi);
   }
 
   MPI_Finalize();
 
 }
+
 ```
 
 
