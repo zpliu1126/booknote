@@ -36,4 +36,5 @@
 
 + 鉴定亚基因组同源源基因
 +  曼-惠特尼U检验 
++   [ deepTools](https://deeptools.readthedocs.io/en/develop/index.html#)  展示甲基化数据
 
