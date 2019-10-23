@@ -18,6 +18,14 @@
 
 ### 可变剪切
 
++ Regulation of alternative splicing by local histone modifications: potential roles for RNA-guided mechanisms.
+
+  https://dx.doi.org/10.1093%2Fnar%2Fgkt875
+
+   https://watermark.silverchair.com/gkt875.pdf 
+
++ 
+
 
 
 
