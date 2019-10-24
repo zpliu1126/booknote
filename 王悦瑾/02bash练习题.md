@@ -35,3 +35,7 @@
 + `sort`
 + `uniq`
 
+CDS、5'_UTP 、3'_UTR、exon、intron理解
+
+ http://www.dxy.cn/bbs/topic/36728037?sf=2&dn=10 
+
