@@ -4,7 +4,37 @@
 
 ### 1.从NCBI下载原始数据
 
++ 多线程同时下载
 
+  ```bash
+  dataSRRID=(SRR8089897
+  SRR8089896
+  SRR8089895
+  )
+  
+  for id in ${dataSRRID[@]};
+  do 
+  j=`echo ${id:0:6}`
+  wget -c ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/${j}/${id}/${id}.sra &
+  
+  done 
+  
+  ```
+
++ 检查数据大小
+
+  ```bash
+  ### 使用curl命令访问NCNI网页
+  for i in `ls .|grep sra`; do j=`echo ${i:0:10}`; curl https://www.ncbi.nlm.nih.gov/sra/${j}|grep -E "<tbody><tr>.*</tr></tbody>" >>1 ; done
+  ### 正则表达式将数据大小给匹配出来，之后网页内容可能会有所改变，正则表达式可能不固定
+  sed 's/.*<tbody><tr>\(.*\)<\/tr><\/tbody>/\1/g' 1|sed 's/.*align=\"right\">\(.*\)<\/td><td>.*/\1/g' >2
+  ### 与本地数据进行比较
+  ls -lh|grep sra |paste  - 2 |less
+  ```
+
++ 将sra文件转换成fastq文件
+
+  
 
 ### 2.数据过滤 Trimmomatic
 
