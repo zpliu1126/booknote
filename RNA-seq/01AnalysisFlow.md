@@ -34,6 +34,17 @@
 
 + 将sra文件转换成fastq文件
 
+  ```bash
+  dataSRRID=(SRR8089897
+  SRR8089896
+  SRR8089895
+  )
+  for i in ${dataSRRID[@]};
+  do
+  fastq-dump --split-3 ./rawdata/${i}.sra -O ./fast_dump/ &
+  done
+  ```
+
   
 
 ### 2.数据过滤 Trimmomatic
