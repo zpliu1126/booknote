@@ -4,3 +4,13 @@
 
 
 
+### 查看用户登录记录
+
+```bash
+ last -f /var/log/wtmp|less
+```
+
+
+
+
+
