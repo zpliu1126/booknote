@@ -87,6 +87,32 @@ done
 + 可以写成多个for循环进行跑
 + `&`作用是将for循环放入后台，进行并行计算，**基本上100多G的数据 30分钟跑完**
 
+### 3.将数据比对到参考基因组
 
++ 构建参考基因组索引'
 
-2. 
+  接收基因组fasta序列文件，和索引生成路径及索引前称
+
+  ```bash
+  echo "Ghirsutum_genome_HAU_v1 begin build"
+  hisat2-build /public/home/zpliu/genome_data/genome_Ghitsutum_NAU/genome.Ghir.NAU.fa  ./genome_Ghitsutum_NAU/Ghitsutum 
+  
+  ```
+
++ 进行比对
+
+  ```bash
+  Gh_indexfile='/public/home/zpliu/Hisat2Index/Ghirsutum_genome_HAU_v1.1/Ghirsutum_genome_HAU_v1'
+  Gh_hisatout="./hisat2out/"
+  all_fastq=`ls ./Trimmomatic|grep "_1P"`
+  
+  for i in ${all_fastq[@]};
+  do
+  j=`echo ${i}|sed 's/_1P/_2P/g'`
+  k=`echo ${i}|sed 's/_1P//g'`
+  hisat2 -x ${Gh_indexfile} -1 ./Trimmomatic/${i} -2 ./Trimmomatic/${j}  -p 10 --known-splicesite-infile  /public/home/zpliu/genome_data/Ghirsutum_genome_HAU_v1.1/hista_splice.txt -S ./hisat2out/${k}.sam && samtools view -S ./hisat2out/${k}.sam -@ 10 -b -o ./hisat2out/${k}.bam && samtools sort -@ 10 ./hisat2out/${k}.bam -O bam -o ./hisat2out/${k}_sort.bam 
+  done
+  ```
+
+  
+
