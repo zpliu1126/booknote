@@ -114,5 +114,22 @@ done
   done
   ```
 
-  
+
+
+
+### 4.计算基因表达量
+
+将比对好的sam文件按照染色体位置进行排序后，使用stringtie比对
+
+```bash
+Gh_gff="/public/home/zpliu/genome_data/Ghirsutum_genome_HAU_v1.1/Ghirsutum_gene_model.gff3"
+
+for i in `ls ./hisat2out`;
+do
+j=`echo ${i}|sed 's/_.*//g'`
+stringtie ./hisat2out/${i} -G ${Gh_gff} -e -p 10 -A ./stringtie/${j}
+done
+```
+
+
 
