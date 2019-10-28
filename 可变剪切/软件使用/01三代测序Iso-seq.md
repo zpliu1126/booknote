@@ -333,7 +333,7 @@ $ tree
 
 完整的分析 流程 https://github.com/GenomeRIK/tama/wiki
 
-PacBio官方SMART软件使用说明**V8版本的**
+PacBio官方SMART软件使用说明**V8版本的**   single molecular real-time   
 
 https://www.pacb.com/wp-content/uploads/SMRT-Tools-Reference-Guide-v8.0.pdf
 
