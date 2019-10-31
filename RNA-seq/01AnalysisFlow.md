@@ -133,3 +133,36 @@ done
 
 
 
+### 合并多个组织的表达量
+
+```bash
+# 构造字典文件
+sed 's/^/[/g' 111 |sed 's/$/]=/g'|paste - 22 |sed 's/\t//g' >end
+/*
+[SRR8090044]=TM1_10DPA_Fiber_1
+[SRR8090041]=TM1_10DPA_Fiber_2
+[SRR8090042]=TM1_10DPA_Fiber_3
+[SRR8090046]=TM1_15DPA_Fiber_1
+[SRR8090049]=TM1_15DPA_Fiber_2
+[SRR8090050]=TM1_15DPA_Fiber_3
+[SRR8090004]=TM1_20DPA_Fiber_1
+[SRR8090007]=TM1_20DPA_Fiber_2
+[SRR8090006]=TM1_20DPA_Fiber_3
+[SRR8090010]=TM1_25DPA_Fiber_1
+*/
+declare -A sample
+sample=(end文件中的内容)
+# 对每个样本的数据盖头换面
+sort SRR8090089|cut -f 8|sed '1d'|awk 'BEGIN{print "'$a'"}{print $0}'|less
+#SRR数组可以按照一定顺序输出
+SRR=(SRR8090087 SRR8090088)
+# 使用字典批量,这里由于每个生成文件中基因数目不一致，先提取共有的基因存进geneid里，并行运算
+for i in ${SRR[@]};
+do { 
+cat geneid|xargs -I {} grep {} $i |cut -f 8|awk 'BEGIN{print "'${sample[$i]}'"}{print $0}' >${i}_tmp; } &
+done
+
+```
+
+
+
