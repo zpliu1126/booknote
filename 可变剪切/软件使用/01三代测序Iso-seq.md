@@ -327,6 +327,14 @@ $ tree
 
 
 
+### 鉴定可变剪切
+
+**rMATS**需要多个组织或者样本的数据，需要重复
+
+ http://rnaseq-mats.sourceforge.net/rmats4.0.2/index.html 
+
+
+
 
 
 ### 参考
