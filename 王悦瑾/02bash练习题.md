@@ -118,6 +118,18 @@ GTTTCTACGATCTCAATCTGTATTTACTTGAATGATGCTACAAATCTCCATCAAAGTGGTTATTTATTTATAATTGAACA
   yjwang	5
   ```
 
+  大致是这样的
+
+  ```python
+  
+  # 读取一个文件
+  # 使用for循环遍历文件的每一行，会得到一个以"\t"为分隔符的字符串
+  # 将用户名作为字典的键，并且初始化值为0
+  # 再遍历一次，出现相同的用户名则将次数加1
+  ```
+
+  
+
 参考命令 ：
 
 + `last`
@@ -127,9 +139,16 @@ GTTTCTACGATCTCAATCTGTATTTACTTGAATGATGCTACAAATCTCCATCAAAGTGGTTATTTATTTATAATTGAACA
 python 知识点
 
 +  `split()`切割字符串函数https://www.runoob.com/python/att-string-split.html 
+
 + `open()`打开文件函数 https://www.runoob.com/python/python-func-open.html 
+
 + 读写文件  https://www.cnblogs.com/zywscq/p/5441145.html 
+
 + sys获取命令行参数  https://blog.csdn.net/u011068702/article/details/80787226 
+
++ 字典  https://www.runoob.com/python/python-dictionary.html 
+
+  
 
 
 
