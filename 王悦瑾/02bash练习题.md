@@ -43,7 +43,7 @@ CDS、5'_UTP 、3'_UTR、exon、intron理解
 
 
 
-### 2019-10-29
+### ~~2019-10-29~~
 
 基因的**fasta**格式的序列
 
@@ -103,6 +103,35 @@ GTTTCTACGATCTCAATCTGTATTTACTTGAATGATGCTACAAATCTCCATCAAAGTGGTTATTTATTTATAATTGAACA
 + python open函数 https://www.runoob.com/python3/python3-func-open.html
 
 面向对象 ：https://baijiahao.baidu.com/s?id=1597642060961639915&wfr=spider&for=pc
+
+
+
+### 2019-11-02
+
++ 获取服务器最近100条登录记录,将登录记录保存到`login.log`日志文件
+
++ **写一个python脚本**，统计这100条记录中出现了哪些用户，和用户登录的次数,类似这样的结果
+
+  ```python
+  userName	loginCount
+  genome	10
+  yjwang	5
+  ```
+
+参考命令 ：
+
++ `last`
++ `head`
++ `>` 重定向符 https://www.cnblogs.com/piperck/p/6219330.html 
+
+python 知识点
+
++  `split()`切割字符串函数https://www.runoob.com/python/att-string-split.html 
++ `open()`打开文件函数 https://www.runoob.com/python/python-func-open.html 
++ 读写文件  https://www.cnblogs.com/zywscq/p/5441145.html 
++ sys获取命令行参数  https://blog.csdn.net/u011068702/article/details/80787226 
+
+
 
 
 
