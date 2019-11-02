@@ -13,6 +13,12 @@
   +  Epigenetic regulation of subgenome dominance following whole genome triplication in Brassica rapa  
 
     https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.13884 
+  
++   棉花两个亚基因组的进化
+
+    +   Persistence of Subgenomes in Paleopolyploid Cotton after 60 My of Evolution  
+
+      
 
 
 
