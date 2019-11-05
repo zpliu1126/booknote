@@ -26,3 +26,35 @@ return result[0]+result[1];
 }
 ```
 
+### 统计字符串中两个字符出现次数是否相等
+
+我的比较初级，还想着将字符串转换为数组在进行判断
+
+```javascript
+function XO(str){
+  let strArr=str.toLocaleLowerCase().split('');
+  let x=0,o=0;
+  strArr.forEach(element => {
+    if(element=='x'){
+      x++
+    }
+    if(element=='o'){
+      o++
+    }
+  });
+  return x==o ? true:false;
+}
+```
+
+大神们的操作
+
+使用字符串中的正则表达式
+
+```javascript
+function XO(str) {
+  let x = str.match(/x/gi);
+  let o = str.match(/o/gi);
+  return (x && x.length) === (o && o.length);
+}
+```
+
