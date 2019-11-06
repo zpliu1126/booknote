@@ -58,3 +58,33 @@ function XO(str) {
 }
 ```
 
+
+
+### 统计字符串中 单词累计和的最大值
+
++ a=1，b=2，c=3
+
+```javascript
+
+function calcuteASCCII(string){
+  let tmpArray=[]
+  tmpArray=string.split("").map(function(item){
+    return item.charCodeAt()-96
+  })
+  return tmpArray.reduce(function(prev,cur){
+    return prev+cur;
+  })
+}
+function high(x){
+  let tmpArray=x.match(/\b\w+\b/g);
+  if(tmpArray){
+    tmpArray.sort(function(value1,value2){
+      return calcuteASCCII(value2)-calcuteASCCII(value1);
+    }) ;
+    return tmpArray[0]
+  }else{
+    return '';
+  }
+}
+```
+
