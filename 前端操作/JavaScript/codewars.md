@@ -98,5 +98,33 @@ function high(s){
 //[...set]是一个扩展运算符，将一个数组转为用逗号分隔的参数列表。
 ```
 
+### 获取数组中不重复的数字
+
++ 将第一个取出来之后再进行查找
++ 比较剩余数是否与当前数相同
+
+```javascript
+function findUniq(arr) {
+  let value
+  value=arr.shift()
+  if(arr.indexOf(value)==-1){
+        return value
+   }else{
+      return arr.filter(function(item){
+        return item !=value;
+      })[0]
+   }
+}
+```
+
+秀儿
+
+```javascript
+function findUniq(arr) {
+  arr.sort((a,b)=>a-b);
+  return arr[0]==arr[1]?arr.pop():arr[0]
+}
+```
+
 
 
