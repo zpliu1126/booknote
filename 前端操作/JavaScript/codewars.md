@@ -88,3 +88,15 @@ function high(x){
 }
 ```
 
+秀儿
+
+```javascript
+function high(s){
+  let as = s.split(' ').map(s=>[...s].reduce((a,b)=>a+b.charCodeAt(0)-96,0));
+  return s.split(' ')[as.indexOf(Math.max(...as))];
+}
+//[...set]是一个扩展运算符，将一个数组转为用逗号分隔的参数列表。
+```
+
+
+
