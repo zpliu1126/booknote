@@ -128,3 +128,50 @@ function findUniq(arr) {
 
 
 
+### 将罗马数字转换为十进制数字
+
+```javascript
+function solution(roman){
+  function extractCount(string,reg){
+    return string.match(reg) ? string.match(reg).length:0;
+  }
+  let I=extractCount(roman,/I/g)
+  let V=extractCount(roman,/V/g)
+  let M=extractCount(roman,/M/g)
+  let X=extractCount(roman,/X/g)
+  let L=extractCount(roman,/L/g)
+  let C=extractCount(roman,/C/g)
+  let D=extractCount(roman,/D/g)
+  let IV=extractCount(roman,/IV/g);
+  if(IV){
+    return (I-IV)+5*(V-IV)+10*X+50*L+100*C+500*D+1000*M+4*IV;
+  }else{
+    return I+5*V+10*X+50*L+100*C+500*D+1000*M;
+
+  }
+}
+console.log(solution("MMVIII"))
+```
+
+秀儿
+
++ `IV`的情况处理的比我好
++ 使用字典，比我使用正则表达式感觉更高效一些
+
+```javascript
+function solution(roman){
+  var memo = {
+  "I": 1,
+  "V": 5,
+  "X": 10,
+  "L": 50,
+  "C": 100,
+  "D": 500,
+  "M": 1000
+  };  
+return [...roman].map(a => memo[a]).reduce((a,b) => a < b  ? b - a : a + b) 
+}
+```
+
+
+
