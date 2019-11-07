@@ -42,6 +42,11 @@
 
 + 甲基化在可变剪切中的作用
 
-    The alternative role of DNA methylation in splicing regulation  
+    ~~The alternative role of DNA methylation in splicing regulation~~ 已看
+    
++ Dynamics and function of DNA methylation in plants
+
++   Rethinking how DNA methylation patterns are maintained  
+
 
 
