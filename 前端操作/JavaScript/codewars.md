@@ -175,3 +175,42 @@ return [...roman].map(a => memo[a]).reduce((a,b) => a < b  ? b - a : a + b)
 
 
 
+### 将重复字符与不重复字符区分开来
+
+**找数组中重复元素的新方法**
+
++ 使用正则表达式进行匹配，在全局匹配模式下降重复字符区分开
++ 正则表达式要考虑元字符
+
+```javascript
+function duplicateEncode(word){
+let metChar=['(',')','{','}','^','$','?','*','+','.','[',']','|','\\']
+    return [...word].map(function(item){
+  let pattern;
+  if(metChar.indexOf(item)===-1){
+    pattern=new RegExp(item,'gi');
+  }else{
+   item="\\"+item //元字符的处理
+   pattern=new RegExp(item,'gi');
+  }
+  return word.match(pattern).length==1 ? '(':")" //重复字符的匹配结果长度大于1
+}).join("")
+}
+```
+
+看看我们的秀儿
+
++ 将字符全部小写
++ 从两个方向找，如果找到的是同样的下标则不重复，反之则是重复的
+
+```javascript
+function duplicateEncode(word){
+  return [...word.toLowerCase()]
+      .map(function(item,index,array){
+ 		 return array.indexOf(item)==array.lastIndexOf(item) ? '(':')';
+}).join("");
+}
+```
+
+
+
