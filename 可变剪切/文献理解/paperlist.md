@@ -30,7 +30,9 @@
 
    https://watermark.silverchair.com/gkt875.pdf 
 
-+  Alternative splicing as a regulator of development and tissue identity  文献汇报
++ Alternative splicing as a regulator of development and tissue identity  文献汇报
+
++   https://new.qq.com/rain/a/20180119G0PG84  新闻报道
 
 
 
