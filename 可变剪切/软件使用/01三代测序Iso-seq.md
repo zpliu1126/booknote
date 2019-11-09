@@ -117,6 +117,8 @@ gmap_build -D 存放索引的目录 -d G.arboreum.Chr.v1.0 基因组fasta文件
 
 ```bash
 gmap -D 索引所在目录 -d 索引文件前缀 -f samse -t 10 -n 2 polished.hq.fasta >gmap.sam 2>gmap.err 
+## 推荐使用这种方法,不然老是报错
+cat fasta|gmap -D 索引所在目录 -d 索引文件前缀 -f samse -t 10 -n 2   >gmap.sam 2>gmap.err
 ```
 
 + -f 输出文件为sam格式
@@ -327,11 +329,21 @@ $ tree
 
 
 
-### 鉴定可变剪切
+### 鉴定可变剪切spladder
 
-**rMATS**需要多个组织或者样本的数据，需要重复
+ 参考文档 https://spladder.readthedocs.io/en/latest/installation.html 
 
- http://rnaseq-mats.sourceforge.net/rmats4.0.2/index.html 
+在Ancona中安装这个软件
+
++ 进行可变剪切的鉴定
+
+  ```bash
+  spladder build -a ../../../07_annotation/merge.gtf  -b ../test.bam  -c 1 -o ./ --merge-strat single
+  ```
+
+  
+
+
 
 
 
