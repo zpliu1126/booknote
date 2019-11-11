@@ -235,7 +235,7 @@ python setup.py install
 conda create --name Cupcake python=3.7 
 conda activate Cupcake 
 conda install Biopython 
-git clone = https://github.com/Magdoll/cDNA_Cupcake.git
+git clone  https://github.com/Magdoll/cDNA_Cupcake.git
 ##添加到环境变量
 export PATH=$PATH:<path_to_Cupcake>/sequence/
 export PATH=$PATH:<path_to_Cupcake>/rarefaction/ ## 这不找不到，不加了
