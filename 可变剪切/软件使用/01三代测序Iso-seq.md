@@ -275,10 +275,16 @@ filter_away_subset.py test.collapsed
  https://github.com/TomSkelly/MatchAnnot 
 
 ```bash
-/usr/bin/python ~/software/MatchAnnot/matchAnnot.py  --gtf 已经发表的基因组gtf文化  --format alt gmap的比对结果sam文件需要按照染色体顺序排好序  >111 
+/usr/bin/python ~/software/MatchAnnot/matchAnnot.py  --gtf 已经发表的基因组gtf文件  --format alt gmap的比对结果sam文件需要按照染色体顺序排好序  >111 
 ```
 
+报错
 
+```bash
+raise RuntimeError ('chromosome %s not in annotation' % chr)
+RuntimeError: chromosome scaffold_662 not in annotation
+## 基因组注释文件里没有这个scaffold的煮熟信息，但是基因组序列在建库的时候有，比对的sam结果里就会有
+```
 
 
 
