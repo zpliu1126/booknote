@@ -19,7 +19,7 @@ python ~/software/MatchAnnot/matchAnnot.py  --gtf ~/work/Alternative/data/Gr_gen
 
 ```bash
 # 加入环境变量
-export PATH=$PATH:~/software/cDNA_Cupcake/
+export PATH=$PATH:~/software/cDNA_Cupcake/sequence/
 # 必须切换cDNA_Cupcake目录才能运行
 cd ~/software/cDNA_Cupcake/
 sam_to_gff3.py -h
@@ -38,19 +38,38 @@ sam_to_gff3.py -s "标识符" ~/work/Alternative/result/Gr_result/CO41_42_result
 
 
 
-#### 提取GMAP得到的gff文件中每个isform的bed文件
+#### 提取可变剪切文件中每个isform的bed文件
 
 ```bash
-sed '/^#/d' test.gff|awk -F "\t" '{print $9}' |awk -F "|" '{print $2"\t"$1}' |sed -e 's/([^)])//g' -e 's/:/\t/g' -e 's/-/\t/g'|sort|uniq|less 
+## 将所有的PacBioisform与基因编号提取出来
+python classAltern.py splice.ascode.list.txt 11
+awk '$6~/PB/{print $6"\t"$2}' 11  >2
+awk '$7~/PB/{print $7"\t"$2}' 11  >>2
+## 将每条PacBio序列的坐标提取
+cut -f1 2|awk -F "|" '{print $2"\t"$1}' |sed -e 's/([^)])//g' -e 's/:/\t/g' -e 's/-/\t/g'|
+## 提取对应每个基因的坐标，使用自己写的脚本
+python $0 gfffile geneIDfile outfile
+### 检查一下结果是否是对的，没有输出则是正确的
+paste  2 3|awk '$2!=$3{print $0}'
+### 提取出错的比对isfrom编号
+cut -f1 2|awk -F "|" '{print $2"\t"$1}' |sed -e 's/([^)])//g' -e 's/:/\t/g' -e 's/-/\t/g'|paste - 3 |awk  '{if($7-$2>3000||$3-$8>3000){print $0}}' |less 
+## 开始过滤比对出错的转录本对应的剪切事件
+cut -f1 2|awk -F "|" '{print $2"\t"$1}' |sed -e 's/([^)])//g' -e 's/:/\t/g' -e 's/-/\t/g'|paste - 3 |awk  '{if($7-$2>3000||$3-$8>3000){print $0}}' |cut -f4|sort |uniq |xargs  -I {} grep "{}|" 11 >error_align.txt
+## 过滤,最后文件为end文件
+cat error_align.txt 11 |sort |uniq -u >end
+
 ```
 
-#### 提取参考基因组中gene的吧bed文件
-
-考虑到基因初始位置减去3000后出现负数，经把它改成0
+#### 按基因的坐标来提取可变剪切的数目
 
 ```bash
-awk '$3~/gene/{printf $1"\t"$4-3000"\t"$4-3000+1"\t"$9"\n"$1"\t"$5+3000"\t"$5+3001"\t"$9"\n"}' ~/work/Alternative/data/Ga_genome/G.arboreum.Chr.v1.0.gff|awk '{if($2<0){print $1,0,1,$4}else{print $0}}' OFS="\t"
+## 只使用坐标不关心是哪两个isform直接形成的
+cut -f 1,2,3,4,5 end |sort|uniq  >end_second
 ```
+
+
+
+![流程图](https://43423.oss-cn-beijing.aliyuncs.com/img/20191114103140.png)
 
 ### 使用脚本鉴定可变剪切
 
@@ -72,6 +91,7 @@ awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $11 
 + -t 指定识别模式
 + -c 如果外显子相似度达到阈值，则过滤掉转录本
 + -ave  如果边缘差异在【0,3】内，则过滤这个剪切事件
++ -ca, --canonical      consider only introns with canonical splice sites
 
 #### 可变剪切的类型
 
