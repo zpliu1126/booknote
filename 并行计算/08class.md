@@ -1,6 +1,6 @@
 ### 混和模式，MPI和openMP求pi
   + `export OMP_NUM_THREADS=2`定义每个进程的线程数
-  
+
 
 ```c
   #include "mpi.h"
@@ -40,31 +40,54 @@
 ### 求数组最大值
 
 ```c
-  #include "mpi.h"
+   #include "mpi.h"
   #include "omp.h"
   #include <malloc.h>
   #include <unistd.h>
   #include <stdio.h>
   #include <stdlib.h>
-  #define dimension 100
   int main(int argc, char *argv[])
   {
     float *Array;
-    int rank,numprocess;
+    int rank,numprocess,dimension;
+    struct{
+      double value;
+      int index;
+    } in,out;
+    double startTime,endTime;
     MPI_Init(&argc,&argv);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     MPI_Comm_size(MPI_COMM_WORLD,&numprocess);
-    srand(2019);
-    printf("%d\n",rank);
-    //初始化数组
-    Array=(float*)malloc(dimension*sizeof(float));
+    MPI_Barrier(MPI_COMM_WORLD);
+    startTime=MPI_Wtime();
     if(rank==0){
+      printf("请输入一个数组长度:\n");
+      scanf("%d",&dimension);
+    }
+    MPI_Bcast(&dimension,1,MPI_INT,0,MPI_COMM_WORLD);//发送每个进程维度
+    //初始化数组
+  //根据每个进程设置种子
+    Array=(float*)malloc(dimension*sizeof(float));
+  
     for(int i=0;i<dimension;i++){
-      Array[i]=(float)rand()/RAND_MAX;
+        // srand(rank*i+1);
+      Array[i]=100.0 * rand() / RAND_MAX;
+      }
+    //初始化结构体的值
+    in.value=0.0;
+    for(int i=0;i<dimension;i++){
+      if(Array[i]>in.value){
+        in.value=Array[i];
+        in.index=rank*dimension+i;
       }
     }
-    MPI_Bcast(Array,dimension,MPI_FLOAT,0,MPI_COMM_WORLD);
-    printf("%f\t%d\n",Array[2],rank);
+    MPI_Reduce(&in,&out,1,MPI_DOUBLE_INT,MPI_MAXLOC,0,MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
+    endTime = MPI_Wtime() ;
+    if(rank==0){
+      printf("maxrank= %d, maxindex=%d, maxvalue= %g, time= %g(s)\n", out.index/dimension,out.index%dimension, out.value, endTime-startTime);
+    }
+    free(Array);
     MPI_Finalize();
     return 0;
   }
