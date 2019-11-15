@@ -214,3 +214,50 @@ function duplicateEncode(word){
 
 
 
+### 中土世界大战
+
++ 两个数组乘上对应的加权数
++ 求数组累计和，然后比较
+
+```javascript
+function goodVsEvil(good, evil) {
+  goodWorth = [1, 2, 3, 3, 4, 10];
+  evilWorth = [1, 2, 2, 2, 3, 5, 10];
+  var goodSum, evilSum;
+  goodSum=good.split(" ").map(function (item, index) {
+    return parseInt(item) * goodWorth[index];
+  }).reduce(function(pre,cur){
+    return pre+cur;
+  })
+  evilSum=evil.split(" ").map(function (item,index) {
+    return parseInt(item) * evilWorth[index];
+  }).reduce(function(pre,cur){
+    return pre+cur;
+  })
+  if (goodSum == evilSum) {
+    return "Battle Result: No victor on this battle field";
+  }
+  else if (goodSum > evilSum) {
+    return "Battle Result: Good triumphs over Evil";
+  }
+  else {
+    return "Battle Result: Evil eradicates all trace of Good";
+  }
+}
+```
+
+
+
+秀儿
+
++ reduce函数可以从数组的第一项开始，而不是数组的第二项
++ 赋给result初值 0
+
+```javascript
+good.split(" ").reduce(function(result,value,index){
+    
+},0)
+```
+
+
+
