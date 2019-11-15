@@ -65,6 +65,20 @@ cat error_align.txt 11 |sort |uniq -u >end
 ```bash
 ## 只使用坐标不关心是哪两个isform直接形成的
 cut -f 1,2,3,4,5 end |sort|uniq  >end_second
+###########
+for i in 1; do 
+grep ExonS end_second|wc -l; 
+grep ExonS end_second|awk '{print $2}' |sort|uniq |wc -l; 
+grep IntronR end_second|wc -l; 
+grep IntronR end_second|awk '{print $2}' |sort|uniq |wc -l; 
+grep AltD end_second|wc -l; 
+grep AltD end_second|awk '{print $2}' |sort|uniq |wc -l; 
+grep AltA end_second|wc -l;
+grep AltA end_second|awk '{print $2}' |sort|uniq |wc -l; 
+grep AltP end_second|wc -l; 
+grep AltP end_second|awk '{print $2}' |sort|uniq |wc -l; 
+grep Other end_second|wc -l; 
+grep Other end_second|awk '{print $2}' |sort|uniq |wc -l; done
 ```
 
 
