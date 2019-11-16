@@ -65,6 +65,8 @@ cat error_align.txt 11 |sort |uniq -u >end
 ```bash
 ## 只使用坐标不关心是哪两个isform直接形成的
 cut -f 1,2,3,4,5 end |sort|uniq  >end_second
+## 改进了方法，使用sort加uniq，对于基因坐标相同的事件，保留了对应的转录本信息
+awk '$1~/[^c]/{print $0}' end|awk '{print $8,$6,$7,$1,$2,$3,$4,$5}' OFS="\t"|sort -r  -k7,8|uniq -f 3|awk '{print $4,$5,$6,$7,$8,$2,$3,$1}' OFS="\t"|sort -n -k4,5 >end_third
 ###########
 for i in 1; do 
 grep ExonS end_second|wc -l; 
