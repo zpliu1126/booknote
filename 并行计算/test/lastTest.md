@@ -289,7 +289,8 @@ int i;
 
 ### 3.2MPI多进程模式
 
-
++ 使用MPI_Scatter将要计算的范围分发给各个进行
++ 使用MPI_Gather将每个进程的结果汇总到0号进程
 
 ```c
 #include <stdio.h>
@@ -358,7 +359,9 @@ int main(int argc, char *argv[])
 
 ### 3.3MPI和OpenMPI混合模式
 
-
++ 根据进程ID计算每个进程所要计算的范围
++ 每个进行使用多线程进行计算，使用reduction制导语句将多个线程的结果汇总
++ 使用MPI_Reduce将多个进程的计算结果进行汇总
 
 ```c
  #include "mpi.h"
