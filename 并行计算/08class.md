@@ -40,7 +40,7 @@
 ### 求数组最大值
 
 ```c
-   #include "mpi.h"
+  #include "mpi.h"
   #include "omp.h"
   #include <malloc.h>
   #include <unistd.h>
