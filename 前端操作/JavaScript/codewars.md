@@ -261,3 +261,46 @@ good.split(" ").reduce(function(result,value,index){
 
 
 
+### 将字符串改成驼峰类型
+
+```javascript
+#第一个小写则不需要转换
+function toCamelCase(str){
+  if(str===''){
+    return '';
+  }
+  str=str.replace(/[—-]/g,"_")
+  if(/^[A-Z]/.test(str))
+  {
+    return str.split("_").map(function(item){
+      item.match(/^([a-z])/)
+      return item.replace(/^([a-z])/,RegExp.$1.toUpperCase())
+    }).join("")
+  }else{
+    tmp=str.split("_")
+    a=tmp.shift()
+    b=tmp.map(function(item){
+      item.match(/^([A-Za-z])/)
+    return item.replace(/^([A-Za-z])/,RegExp.$1.toUpperCase())
+    })
+   b.unshift(a)
+    return b.join("")
+  }
+}
+```
+
+秀儿
+
+使用回调函数处理匹配到的`_[a-zA-Z]`,其实我也想要用replace函数的，但是不知道得到匹配的内容，学到了
+
+```javascript
+function toCamelCase(str){
+      var regExp=/[-_]\w/ig;
+      return str.replace(regExp,function(match){
+            return match.charAt(1).toUpperCase();
+       });
+}
+```
+
+
+
