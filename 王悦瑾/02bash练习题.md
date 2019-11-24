@@ -148,6 +148,12 @@ python 知识点
 
 + 字典  https://www.runoob.com/python/python-dictionary.html 
 
+Solution：
+
+![字典与数组](https://43423.oss-cn-beijing.aliyuncs.com/img/20191124133553.png)
+
+  
+
   
 
 
