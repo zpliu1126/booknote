@@ -42,4 +42,4 @@
 ### 参考
 
 1. Persistence of Subgenomes in Paleopolyploid Cotton after60 My of Evolution  
-2. 
+2. [Repeated polyploidization of  Gossypium genomes and the evolution of spinnable cotton fibres]( https://www.nature.com/articles/nature11798 )
