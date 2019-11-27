@@ -15,3 +15,30 @@ function createMessage(str) {
 }
 ```
 
+
+
+### 两个数组去重
+
+```javascript
+## 遍历b来除去a中相同的
+function array_diff(a, b) {
+  b.map(function(item){
+    if(a.indexOf(item)!=-1){
+    while(a.indexOf(item)!=a.lastIndexOf(item)){
+      a.splice(a.indexOf(item),1)
+    }
+    a.splice(a.indexOf(item),1)}
+  })
+  return a
+}
+```
+
+秀儿
+
+```javascript
+## 之间遍历a
+function array_diff(a, b) {
+  return a.filter(function(x) { return b.indexOf(x) == -1; });
+}
+```
+
