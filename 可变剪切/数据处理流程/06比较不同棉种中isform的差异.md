@@ -51,8 +51,56 @@ awk -F ";" '{print $3";"$2"\t"$1}' merge.gtf|awk -F "\t" '{print $2,$3,$4,$5,$6,
 使用亚基因组同源基因去获取，`07annotion/merge.gtf`文件中被PacBio检测到的转录本
 
 ```bash
-cat homologGeneId.txt |xargs -I {} grep {} ~/work/Alternative/result/Gr_result/CO41_42_result/07_annotation/merge.gtf|awk -F "\t" '$3~/^t/&&$9~/PB/{print $0}' >homolog_isform_count.txt
+cat DthomologeGeneId.txt | xargs -I {} grep {} ~/work/Alternative/result/Gh_result/CO31_32_result/07_annotation/merge.gtf | awk -F "\t" '$3~/^t/{print $0}' > Dthomolog_isform_count.txt
+## 统计每个基因能表达的isform总数
+awk -F ";" '{print $3,$2}' OFS="\t" Athomolog_isform_count.txt|sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g'|awk '{a[$1]+=1}END{for(i in a){print i"\t"a[i]}}'|less
+## 在叶片中表达isform的数目
+awk -F ";" '{print $3,$2}' OFS="\t" Athomolog_isform_count.txt|sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g'|awk '$2~/^P/{a[$1]+=1}$2~/^[^P]/{a[$1]+=0}END{for(i in a){print i"\t"a[i]}}' >At_leaf_isform.txt
+## 按照顺序排列
+cat AthomologeGeneId.txt | xargs -I {} grep {} At_leaf_isform.txt > At_leaf_isform_sorted.txt &
 ```
+
+在讨论isform的数目上忽略掉lncRNA的因素，感觉数目不是很多
+
+```bash
+cat onlymRNA/Athomolog_isform_count.txt  ./LncRNA/AtlncRNA.txt |awk -F ";" '{print $3,$2}' OFS="\t" |sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g'
+## 统计每个基因注释的isform数目，这次基因数目对上了
+cat onlymRNA/Athomolog_isform_count.txt  ./LncRNA/AtlncRNA.txt |awk -F ";" '{print $3,$2}' OFS="\t" |sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g'|awk '{a[$1]+=1}END{for(i in a){print i"\t"a[i]}}'|wc -l 
+## 只在叶片中表达的基因数目
+cat onlymRNA/Athomolog_isform_count.txt  ./LncRNA/AtlncRNA.txt |awk -F ";" '{print $3,$2}' OFS="\t" |sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g'|awk '$2~/^P/{a[$1]+=1}$2~/^[^P]/{a[$1]+=0}END{for(i in a){print i"\t"a[i]}}'|wc -l
+########## Ga得搞一下
+cat onlymRNA/homolog_isform_count.txt LncRNA/lncRNA.txt |awk -F ";" '{print $3,$2}' OFS="\t" |sed -e 's/orginal_gene_id //g' -e 's/transcript_id //g' -e 's/\"//g' -e 's/evm\.TU\.//g' -e 's/EVM_prediction_//g'|tail
+```
+
+把同源基因的转录本信息合并一下
+
+```bash
+## 叶片中的isform数目
+paste D5_leaf_isformCountsorted.txt ../A2/A2_leaf_isformCountsorted.txt ../TM1/Dt_leaf_isformCountsorted.txt  ../TM1/At_leaf_isformCountsorted.txt |less
+## 全部的isform数目
+paste D5_isform_countsorted.txt ../A2/A2_isform_countsorted.txt ../TM1/Dt_isform_countsorted.txt  ../TM1/At_isform_countsorted.txt |less
+```
+
+
+
+
+
+#### 有的基因在merge转录本之后，被注释为lncRNA了把这些基因对去除
+
+统计了一下各个基因中lncRNA的数目，以及亚基因组同源基因中lncRNA的数目
+
+| lncRNACount |     At     |  Dt  |  A2  |  D5  |
+| :---------: | :--------: | :--: | :--: | :--: |
+|  亚基因组   | 两个共2754 |      | 1934 | 1216 |
+| 同源基因间  |    102     |  97  | 148  | 106  |
+
+也可以比较一下，亚基因组同源基因是不是都为lncRNA，可以在discussion里提一下
+
+```bash
+cat homologeGeneId.txt|sed 's/evm\.TU\.//g' | xargs -I {} grep {} ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/merge.gtf |awk -F "\t" '$3~/^lnc/{print $0}'
+```
+
+
 
 
 
