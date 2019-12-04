@@ -1,4 +1,4 @@
-# RNA介导的局部染色质修饰对可变剪切的调控
+# 11RNA介导的局部染色质修饰对可变剪切的调控
 
 ##   Regulation of alternative splicing by local histone modifications: potential roles for RNA-guided mechanisms  
 

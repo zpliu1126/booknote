@@ -35,14 +35,12 @@ awk '$3~/mRNA/{print $0}' /public/home/zpliu/genome_data/genome_Grai.JGI/gene.Gr
 
 **文件中如果是原本参考基因组的注释，就说明基因的这个转录本在叶片中没有表达，从而没有被PacBio检测到，或者就是这个基因没有表达。**
 
-可以使用这个merge.gtf文件当做参考进行AS的鉴定
+~~可以使用这个merge.gtf文件当做参考进行AS的鉴定~~，效果不理想
 
 ```bash
 ## 07文件夹中merge.gtf`
 awk -F ";" '{print $3";"$2"\t"$1}' merge.gtf|awk -F "\t" '{print $2,$3,$4,$5,$6,$7,$8,$9,$1}' OFS="\t"|sed 's/orginal_//g' >merge_C.gtf
 ```
-
-
 
 
 
@@ -102,7 +100,93 @@ cat homologeGeneId.txt|sed 's/evm\.TU\.//g' | xargs -I {} grep {} ~/work/Alterna
 
 
 
+### 不同转录本间表达量的计算
 
+使用stringtie计算不同转录本间表达量的差异 `-b`参数。使用`merge.gtf`文件作为基因组参考文件
+
+这个文件里面有一些不知道是比对到哪个基因的lncRNA和novel gene，就不要了
+
+```bash
+## merge.gtf文件需要改造一下，将PacBio的基因编号改成基因组的编号
+sed 's/EVM_prediction_/evm\.TU\./g' ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/merge.gtf|awk -F "\t" '$9~/evm/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" |awk -F ";" '{print $4,$3";"$2";"$3";"}' OFS="\t"|sed 's/orginal_//' >./../A2_merge_cahnge.gtf
+
+awk -F "\t" '$9~/Gor/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" ~/work/Alternative/result/Gr_result/CO41_42_result/07_annotation/merge.gtf| awk -F ";" '{print $4,$3";"$2";"$3";"}' OFS="\t"|sed 's/orginal_//' >./../D5_merge_change.gtf
+
+awk -F "\t" '$9~/Gh/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" ~/work/Alternative/result/Gh_result/CO31_32_result/07_annotation/merge.gtf| awk -F ";" '{print $4,$3";"$2";"$3";"}' OFS="\t"|sed 's/orginal_//' >./../TM-1_merge_change.gtf
+
+```
+
+### 仅在叶片中isfrom数目数目的差异
+
+对数据进行分组
+
+1. A2=D5 vs At=Dt
+2. A2=D5 vs At!=Dt
+3. A2!=D5 vs At=Dt
+4. A2 >D5 vs At>Dt  || A2<D5 At<Dt
+5. A2 >D5 vs At<Dt ||  A2<D5 At>Dt
+
+```bash
+## 第一类 At=Dt=A2=D5=0
+awk '$2==0&&$4==0&&$6==0&&$8==0{print $0}' leaf_isform_count >class1
+## 第一类 A2=D5=0 At=Dt
+awk '$2==0&&$4==0&&$6!=0&&$8!=0{if($6/$8<2&&$6/$8>0.5){print $0}}' leaf_isform_count  >>class1
+## 第一类 A2=D5 At=Dt=0
+awk '$2!=0&&$4!=0&&$6==0&&$8==0{if($2/$4<2&&$2/$4>0.5){print $0}}' leaf_isform_count  >>class1
+## 第一类 A2=D5 At=Dt A2、D5、At、Dt！=0
+awk '$2!=0&&$4!=0&&$6!=0&&$8!=0{if($2/$4<2&&$2/$4>0.5){if($6/$8<2&&$6/$8>0.5){print $0}}}' leaf_isform_count  >>class1
+## 第二类 A2=D5 At>Dt
+awk '($2!=0&&$4!=0&&$2/$4<2&&$2/$4>0.5)||($2==0&&$4==0){if($8>0&&$6==0){ print $0}else if($8>0&&$6>0&&$8/$6>=2){print $0}}' leaf_isform_count  >class2
+## 第二类 A2=D5 At<Dt
+awk '($2!=0&&$4!=0&&$2/$4<2&&$2/$4>0.5)||($2==0&&$4==0){if($6>0&&$8==0){ print $0}else if($8>0&&$6>0&&$8/$6<=0.5){print $0}}' leaf_isform_count >>class2
+## 第三类 At=Dt A2>D5
+awk '($6!=0&&$8!=0&&$6/$8<2&&$6/$8>0.5)||($6==0&&$8==0){if($4>0&&$2==0){ print $0}else if($4>0&&$2>0&&$4/$2>=2){print $0}}' leaf_isform_count  >class3
+## 第三类 At=Dt A2<D5
+awk '($6!=0&&$8!=0&&$6/$8<2&&$6/$8>0.5)||($6==0&&$8==0){if($2>0&&$4==0){ print $0}else if($4>0&&$2>0&&$2/$4>=2){print $0}}' leaf_isform_count  >>class3
+## 第四类 A2>D5 vs At > Dt
+awk '($4>0&&$2==0)||($4>0&&$2>0&&$4/$2>=2){if($8>0&&$6==0){ print $0}else if($8>0&&$6>0&&$8/$6>=2){print $0}}' leaf_isform_count >class4
+## 第四类 A2<D5 vs At < Dt
+awk '($2>0&&$4==0)||($2>0&&$4>0&&$2/$4>=2){if($6>0&&$8==0){ print $0}else if($8>0&&$6>0&&$6/$8>=2){print $0}}' leaf_isform_count >>class4
+## 第五类 A2>D5 vs At < Dt
+awk '($4>0&&$2==0)||($4>0&&$2>0&&$4/$2>=2){if($6>0&&$8==0){ print $0}else if($8>0&&$6>0&&$6/$8>=2){print $0}}' leaf_isform_count >class5
+## 第五类 A2<D5 vs At > Dt
+awk '($2>0&&$4==0)||($2>0&&$4>0&&$2/$4>=2){if($8>0&&$6==0){ print $0}else if($8>0&&$6>0&&$8/$6>=2){print $0}}' leaf_isform_count >>class5
+
+```
+
+使用log2的方法比较不同同源基因间，isform数目上的差异
+
+构造画图数据
+
+```R
+X坐标为基因组	y坐标为isform数目 分组信息都使用一个亚基因组的编号代替
+D5	10 Gorai.002G002000	calss1
+A2	5	Gorai.002G002000	class1
+At	8	Gorai.002G002000	class1
+D5	12	Gorai.002G002000	class1
+## 使用awk对每种类型的数据进行操作
+# $class在环境中定义好，省的改那么多
+awk -F "\t" '{printf "D5\t"$2"\t"$1"\t'$class'\nA2\t"$4"\t"$1"\t'$class'\nDt\t"$6"\t"$1"\t'$class'\nAt\t"$8"\t"$1"\t'$class'\n"}'
+```
+
+！！！不理想，换种方式画
+
+![isform分类模式](https://s2.ax1x.com/2019/12/04/QlLTqH.png)
+
+
+
+```bash
+## 使用亚基因组之间的log2值作为纵坐标，横坐标就是log2(At/Dt) log2(A2/D5)
+## 分子分母同时为0，则为1，单个为0的话把0换成0.1
+awk '$2==0&&$4==0&&$6==0&&$8==0{printf "A2/D5\t1\t"$1"\tclass1\nAt/Dt\t1\t"$1"\tclass1\n"}' leaf_isform_count >ggplot_data/isform_count.2txt
+awk '$2==0&&$4==0&&$6!=0&&$8!=0{if($6/$8<2&&$6/$8>0.5){printf "A2/D5\t1\t"$1"\tclass1\nAt/Dt\t"$8/$6"\t"$1"\tclass1\n"}}' leaf_isform_count  >>ggplot_data/isform_count.2txt 
+awk '$2!=0&&$4!=0&&$6==0&&$8==0{if($2/$4<2&&$2/$4>0.5){printf "A2/D5\t"$4/$2"\t"$1"\tclass1\nAt/Dt\t1\t"$1"\tclass1\n"}}' leaf_isform_count  >>ggplot_data/isform_count.2txt
+awk '$2!=0&&$4!=0&&$6!=0&&$8!=0{if($2/$4<2&&$2/$4>0.5){if($6/$8<2&&$6/$8>0.5){printf "A2/D5\t"$4/$2"\t"$1"\tclass1\nAt/Dt\t"$8/$6"\t"$1"\tclass1\n"}}}' leaf_isform_count  >ggplot_data/isform_count.2txt
+## 第二类
+awk '($2!=0&&$4!=0&&$2/$4<2&&$2/$4>0.5){if($8>0&&$6==0){printf "A2/D5\t"$4/$2"\t"$1"\tclass2\nAt/Dt\t"$8/0.1"\t"$1"\tclass2\n"}else if($8>0&&$6>0&&$8/$6>=2){ printf "A2/D5\t"$4/$2"\t"$1"\tclass2\nAt/Dt\t"$8/$6"\t"$1"\tclass2\n"}}($2==0&&$4==0){if($8>0&&$6==0){printf "A2/D5\t""1\t"$1"\tclass2\nAt/Dt\t"$8/0.1"\t"$1"\tclass2\n"}else if($8>0&&$6>0&&$8/$6>=2){printf "A2/D5\t""1\t"$1"\tclass2\nAt/Dt\t"$8/$6"\t"$1"\tclass2\n"}}' leaf_isform_count >ggplot_data/isform_count.2txt
+
+
+```
 
 
 
