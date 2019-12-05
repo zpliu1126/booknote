@@ -136,6 +136,21 @@ awk -F "\t" '{print $9 }' splice.ascode.list.txt|cut -d \; -f 3|sed 's/structure
 
 
 
+### 如果基因组注释的转录本不准确的话，会影响AS事件的鉴定，所以使用`07/merge.gtf`文件取鉴定可变剪切事件
+
+新基因不分析
+
+```bash
+## merge.gtf文件需要改造一下，将PacBio的基因编号改成基因组的编号
+sed 's/EVM_prediction_/evm\.TU\./g' ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/merge.gtf|awk -F "\t" '$9~/evm/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" |awk -F ";" '{print $4,$3";"$2";"}' OFS="\t"|sed 's/orginal_//' >./../A2_merge_cahnge.gtf
+
+awk -F "\t" '$9~/Gor/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" ~/work/Alternative/result/Gr_result/CO41_42_result/07_annotation/merge.gtf| awk -F ";" '{print $4,$3";"$2";"}' OFS="\t"|sed 's/orginal_//' >./../D5_merge_change.gtf
+
+awk -F "\t" '$9~/Gh/{print $9$1,$2,$3,$4,$5,$6,$7,$8}' OFS="\t" ~/work/Alternative/result/Gh_result/CO31_32_result/07_annotation/merge.gtf| awk -F ";" '{print $4,$3";"$2";"}' OFS="\t"|sed 's/orginal_//' >./../TM-1_merge_change.gtf
+```
+
+
+
 
 
 
