@@ -39,7 +39,7 @@ awk '$3~/mRNA/{print $0}' /public/home/zpliu/genome_data/genome_Grai.JGI/gene.Gr
 
 ```bash
 ## 07文件夹中merge.gtf`
-awk -F ";" '{print $3";"$2"\t"$1}' merge.gtf|awk -F "\t" '{print $2,$3,$4,$5,$6,$7,$8,$9,$1}' OFS="\t"|sed 's/orginal_//g' >merge_C.gtf
+awk -F ";" '{print $3";"$2"\t"$1}' merge.gtf|awk -F "\t" '{print $2,$3,$4,$5,$6,$7,$8,$9,$1";"}' OFS="\t"|sed 's/orginal_//g' >merge_C.gtf
 ```
 
 
@@ -195,8 +195,9 @@ awk '($6!=0&&$8!=0&&$6/$8<2&&$6/$8>0.5){if($2>0&&$4==0){ printf "A2/D5\t"0.1/$2"
 ## 第五类
 awk '($4>0&&$2==0){if($6>0&&$8==0){ printf "A2/D5\t"$4/0.1"\t"$1"\tclass5\nAt/Dt\t"0.1/$6"\t"$1"\tclass5\n"}else if($8>0&&$6>0&&$6/$8>=2){ printf "A2/D5\t"$4/0.1"\t"$1"\tclass5\nAt/Dt\t"$8/$6"\t"$1"\tclass5\n"}}$4>0&&$2>0&&$4/$2>=2{if($6>0&&$8==0){ printf "A2/D5\t"$4/$2"\t"$1"\tclass5\nAt/Dt\t"0.1/$6"\t"$1"\tclass5\n"}else if($8>0&&$6>0&&$6/$8>=2){ printf "A2/D5\t"$4/$2"\t"$1"\tclass5\nAt/Dt\t"$8/$6"\t"$1"\tclass5\n"}}' leaf_isform_count  >>ggplot_data/isform_count.2txt
 awk '($2>0&&$4==0){if($8>0&&$6==0){ printf "A2/D5\t"0.1/$2"\t"$1"\tclass5\nAt/Dt\t"$8/0.1"\t"$1"\tclass5\n"}else if($8>0&&$6>0&&$8/$6>=2){printf "A2/D5\t"0.1/$2"\t"$1"\tclass5\nAt/Dt\t"$8/$6"\t"$1"\tclass5\n"}}$2>0&&$4>0&&$2/$4>=2{if($8>0&&$6==0){ printf "A2/D5\t"$4/$2"\t"$1"\tclass5\nAt/Dt\t"$8/0.1"\t"$1"\tclass5\n"}else if($8>0&&$6>0&&$8/$6>=2){printf "A2/D5\t"$4/$2"\t"$1"\tclass5\nAt/Dt\t"$8/$6"\t"$1"\tclass5\n"}}' leaf_isform_count  >>ggplot_data/isform_count.2txt
- 
 ```
+
+### 比较同源基因转录本的表达差异
 
 
 
