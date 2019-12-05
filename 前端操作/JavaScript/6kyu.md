@@ -42,3 +42,21 @@ function array_diff(a, b) {
 }
 ```
 
+
+
+### 检测网址的主域名
+
+输入数据如下,这次我也成为了秀儿的一员 hh
+
+```javascript
+domainName("http://github.com/carbonfive/raygun") == "github" 
+domainName("http://www.zombie-bites.com") == "zombie-bites"
+domainName("https://www.cnet.com") == "cnet"
+```
+
+```javascript
+function domainName(url){
+  return url.replace(/(https?:\/\/)?(www\.)?/,"").split("/")[0].split("\.")[0]
+}
+```
+
