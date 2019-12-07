@@ -24,7 +24,18 @@
    
    使用自己写的脚本`AS_isform_analysis.py`对内含子在intronR事件中的分布发现，发生intronR的内含子在转录本中的分布是随机的没有什么偏好性，或许后面单个基因的研究会有偏向性。
    
-   
+
+### 自己写脚本对IntronR和ExonS的位置和长度信息进行统计
+
+```python
+## 部分剪切事件有错误存在intronR_err.log文件里
+python ~/scripte/Alternative/AS_isform_analysis.py A2/isform.gff  A2/end_third  A2/Intronstatic2.txt  A2/ExonSstatic.txt >A2/intronR_err.log
+python ~/scripte/Alternative/AS_isform_analysis.py D5/isform.gff  D5/end_third  D5/Intronstatic2.txt  D5/ExonSstatic.txt >D5/intronR_err.log
+python ~/scripte/Alternative/AS_isform_analysis.py TM-1/isform.gff  TM-1/end_third  TM-1/Intronstatic2.txt  TM-1/ExonSstatic.txt >TM-1/intronR_err.log
+
+```
+
+
 
 
 ### 统计发生intronR的长度分布情况
@@ -32,6 +43,8 @@
 ```bash
 ## 提取每个亚基因组中发生IntronR事件的信息
 cut -f3 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs -I {} grep {} ../TM-1/Intronstatic2.txt >At_intronR.txt
+## 提取每个亚基因组的Exons事件信息
+cut -f1 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs  -I {} grep {} ../TM-1/ExonSstatic.txt  >ExonS/Dt_ExonS.txt
 ```
 
 
@@ -64,6 +77,15 @@ awk '$3~/e/{print $0}' ~/work/Alternative/result/Ga_result/CO11_12_result/07_ann
 ```bash
 ## 提取每个isform的内含子区域
 python ../ConstitutiveExon.py   ~/work/Alternative/result/Gr_result/CO41_42_result/07_annotation/D5_merge_C.gtf  TM-1_intron.bed
+## 将所有的内含子和mRNA进行合并,合并前先排好序
+sort -k1,1 -k2,2n  intron.bed >intron_sorted.bed
+~/software/bedtools2-2.29.0/bin/mergeBed  -i sort_intron >merge_intron
+sort -k1,1 -k2,2n  mRNA.bed >mRNA_sorted.bed
+~/software/bedtools2-2.29.0/bin/mergeBed  -i mRNA_sorted.bed >merge_mRNA
+## 使用合并好的mRNA减去合并好的intron就是constitutive exon了，唯一的缺点就是不知道是那个基因编号，到时候，在用intersect取个交集就知道了
+~/software/bedtools2-2.29.0/bin/subtractBed -a  merge_mRNA -b merge_intron >constitutive_exon.bed
+## 获取共有的exon的基因编号
+~/software/bedtools2-2.29.0/bin/intersectBed -a D5_mRNA.bed -b Constitutive_exon.bed -loj |awk -F "\t" '$6!="."{print $6,$7,$8,$4,$5}' OFS="\t" |sort|uniq >constitutive_exon.bed
 
 ```
 
