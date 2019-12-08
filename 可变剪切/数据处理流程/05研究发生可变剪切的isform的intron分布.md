@@ -38,7 +38,7 @@ python ~/scripte/Alternative/AS_isform_analysis.py TM-1/isform.gff  TM-1/end_thi
 
 
 
-### 统计发生intronR的长度分布情况
+### 统计发生intronR和ExonS的长度分布情况
 
 ```bash
 ## 提取每个亚基因组中发生IntronR事件的信息
@@ -58,7 +58,6 @@ cut -f1 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs  -I {} grep {} ../TM-1/ExonSsta
 awk '$3~/[tl]/{print $0}' ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/A2_merge_C.gtf|cut -f1,4,5,7,9|awk -F ";" '{print $1}'|sed 's/gene_id \"//g'|sed 's/\"//g' >A2_mRNA.bed
 # 提取exon对应的坐标作为 B文件
 awk '$3~/e/{print $0}' ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/A2_merge_C.gtf|cut -f1,4,5,7,9|awk -F ";" '{print $1}'|sed 's/gene_id \"//g'|sed 's/\"//g' >/public/home/zpliu/work/Alternative/result/homologo/IntronR/A2_exon.bed
-
 ~/software/bedtools2-2.29.0/bin/subtractBed  -a A2_mRNA.bed  -b A2_exon.bed  |sort|uniq >constitutive_intron.bed
 
 
@@ -87,6 +86,15 @@ sort -k1,1 -k2,2n  mRNA.bed >mRNA_sorted.bed
 ## 获取共有的exon的基因编号
 ~/software/bedtools2-2.29.0/bin/intersectBed -a D5_mRNA.bed -b Constitutive_exon.bed -loj |awk -F "\t" '$6!="."{print $6,$7,$8,$4,$5}' OFS="\t" |sort|uniq >constitutive_exon.bed
 
+```
+
+
+
+### 统计Constitutive Exon与intron的长度与位置信息
+
+```bash
+## 提取外显子的位置和长度信息
+cut -f4 ../GhDt_Gr_GhAt_Ga_end_noScaffold|xargs  -I {} grep {} ../A2/A2_constitutive_intron.bed |awk -F "\t" '{print $1,$2,$3,$3-$2+1,$4,$5}' OFS="\t" >ConstitutiveIntron/A2_constitutive_intron.txt
 ```
 
 
