@@ -32,7 +32,13 @@
 
 + Alternative splicing as a regulator of development and tissue identity  文献汇报
 
-+   https://new.qq.com/rain/a/20180119G0PG84  新闻报道
++ https://new.qq.com/rain/a/20180119G0PG84  新闻报道
+
++   Coordinated alterations in RNA splicing and
+  epigenetic regulation drive leukaemogenesis  
+
++   Multi-strategic RNA-seq analysis reveals a highresolution transcriptional landscape in cotton  
+
 
 
 
