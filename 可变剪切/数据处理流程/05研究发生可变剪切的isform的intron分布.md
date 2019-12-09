@@ -51,6 +51,8 @@ cut -f1 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs  -I {} grep {} ../TM-1/ExonSsta
 
 #### 提取Constitutive intron
 
+**Bedtools默认基因组坐标是从0开始的，而基因序列是从1开始的，所以所有的位置都得加1**
+
 使用mRNA的整个区域减去exon区域
 
 ```bash
@@ -95,7 +97,32 @@ sort -k1,1 -k2,2n  mRNA.bed >mRNA_sorted.bed
 ```bash
 ## 提取外显子的位置和长度信息
 cut -f4 ../GhDt_Gr_GhAt_Ga_end_noScaffold|xargs  -I {} grep {} ../A2/A2_constitutive_intron.bed |awk -F "\t" '{print $1,$2,$3,$3-$2+1,$4,$5}' OFS="\t" >ConstitutiveIntron/A2_constitutive_intron.txt
+## 绘制长度统计图
+for i in 1 
+do
+awk '$2~/Ghir_D/{print $6"\tAlter_intron\tDt"}' ../TM-1/Intronstatic2.txt  >>intron_exon_length.txt
+awk '$2~/Ghir_A/{print $6"\tAlter_intron\tAt"}' ../TM-1/Intronstatic2.txt  >>intron_exon_length.txt
+awk '$2~/Ghir_A/{print $6"\tAlter_exon\tAt"}' ../TM-1/ExonSstatic.txt >>intron_exon_length.txt
+awk '$2~/Ghir_D/{print $6"\tAlter_exon\tDt"}' ../TM-1/ExonSstatic.txt >>intron_exon_length.txt
+awk '$5~/Ghir_A/{print $3-$2+1"\tCons_exon\tAt"}' ../TM-1/TM1_constitutive_exon.bed >>intron_exon_length.txt
+awk '$5~/Ghir_D/{print $3-$2+1"\tCons_exon\tDt"}' ../TM-1/TM1_constitutive_exon.bed >>intron_exon_length.txt
+awk '$5~/Ghir_D/{print $3-$2+1"\tCons_intron\tDt"}' ../TM-1/TM1_constitutive_intron.bed >>intron_exon_length.txt
+awk '$5~/Ghir_A/{print $3-$2+1"\tCons_intron\tAt"}' ../TM-1/TM1_constitutive_intron.bed >>intron_exon_length.txt
+
+awk '{print $3-$2+1"\tCons_exon\tD5"}' ../D5/D5_constitutive_exon.bed    >>intron_exon_length.txt
+awk '{print $3-$2+1"\tCons_intron\tD5"}' ../D5/D5_constitutive_intron.bed >>intron_exon_length.txt
+awk '$2~/^G/{print $6"\tAlter_intron\tD5"}' ../D5/Intronstatic2.txt  >>intron_exon_length.txt
+awk '$2~/^G/{print $6"\tAlter_exon\tD5"}' ../D5/ExonSstatic.txt  >>intron_exon_length.txt
+
+
+awk '{print $3-$2+1"\tCons_intron\tA2"}' ../A2/A2_constitutive_intron.bed >>intron_exon_length.txt
+awk '{print $3-$2+1"\tCons_exon\tA2"}' ../A2/A2_constitutive_exon.bed >>intron_exon_length.txt
+awk '$2~/^e/{print $6"\tAlter_intron\tA2"}'  ../A2/Intronstatic2.txt  >>intron_exon_length.txt
+awk '$2~/^e/{print $6"\tAlter_exon\tA2"}'  ../A2/ExonSstatic.txt   >>intron_exon_length.txt
+done
 ```
+
+
 
 
 
