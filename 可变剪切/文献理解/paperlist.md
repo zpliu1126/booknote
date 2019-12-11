@@ -37,7 +37,10 @@
 +   Coordinated alterations in RNA splicing and
   epigenetic regulation drive leukaemogenesis  
 
-+   Multi-strategic RNA-seq analysis reveals a highresolution transcriptional landscape in cotton  
++ Multi-strategic RNA-seq analysis reveals a highresolution transcriptional landscape in cotton  
+
++   Defining the genetic and evolutionary architecture of alternative splicing in response to infection  
+
 
 
 
