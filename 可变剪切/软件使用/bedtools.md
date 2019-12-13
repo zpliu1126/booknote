@@ -29,7 +29,32 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
   ```bash
   intersectBed  -a CpG_context_D1.bed -b exon_3.bed -loj|less
   ## 获取匹配的行，会将b文件写在后面
+  ```
 ```
   
   
+
+
+```
+
+
+
+
+
+### fastaFromBed
+
+根据基因组位置来提取对应的fasta序列
+
+```bash
+~/software/bedtools2-2.29.0/bin/fastaFromBed -fi ~/genome_data/genome_Garb.CRI/G.arboreum.Chr.v1.0.fa  -fo 1 -name -bed A2_intronR.txt
+```
+
++ -fi 指定基因组序列文件
++ -fo 输出文件
++ -name 从bed文件中读取基因名
++ -bed 基因坐标
+
+
+
+
 

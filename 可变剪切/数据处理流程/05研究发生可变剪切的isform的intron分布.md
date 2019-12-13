@@ -42,9 +42,13 @@ python ~/scripte/Alternative/AS_isform_analysis.py TM-1/isform.gff  TM-1/end_thi
 
 ```bash
 ## 提取每个亚基因组中发生IntronR事件的信息
-cut -f3 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs -I {} grep {} ../TM-1/Intronstatic2.txt >At_intronR.txt
+cut -f3 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../TM-1/Intronstatic2.txt > At_intronR.txt
+cut -f1 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../TM-1/Intronstatic2.txt > Dt_intronR.txt
+cut -f2 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../D5/Intronstatic2.txt > D5_intronR.txt
 ## 提取每个亚基因组的Exons事件信息
-cut -f1 ../GhDt_Gr_GhAt_Ga_end_noScaffold |xargs  -I {} grep {} ../TM-1/ExonSstatic.txt  >ExonS/Dt_ExonS.txt
+cut -f4 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../A2/ExonSstatic.txt > A2_ExonS.txt
+cut -f1 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../TM-1/ExonSstatic.txt > Dt_ExonS.txt
+cut -f3 ../../GhDt_Gr_GhAt_Ga_end_noScaffold | xargs -I {} grep {} ../../TM-1/ExonSstatic.txt > At_ExonS.txt
 ```
 
 
