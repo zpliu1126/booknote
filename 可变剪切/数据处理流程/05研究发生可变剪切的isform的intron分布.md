@@ -132,6 +132,47 @@ done
 
 
 
+### 比较不同类型exon与intron的甲基化水平差异
+
+将CG碱基数目进行标准化，然后计算  CG methylation ratio  ，如果那段序列没有CG碱基，则不用它
+
+```bash
+# 提取对应位置的甲基化水平
+~/software/bedtools2-2.29.0/bin/intersectBed   -b ~/work/Alternative/data/Ga_genome/test/CpG_context_D4.bed -loj  -a ../A2_constitutive_exon.bed >1
+# 提取对应位置的序列信息
+~/software/bedtools2-2.29.0/bin/fastaFromBed -fi ~/genome_data/genome_Garb.CRI/G.arboreum.Chr.v1.0.fa  -fo ./2 -name+ -bed A2_constitutive_exon.bed
+# 根据序列信息提取CG碱基含量
+python ~/scripte/extract_CG_count.py  2  3
+# 计算每个片段的甲基化水平
+# -::tig00008092:9886-9974	0	evm.TU.Ga14G0684
+# -::Chr13:9163360-9163433	0	evm.TU.Ga13G0611
+# +::Chr11:36353080-36353252	0	evm.TU.Ga11G1424
+# +::Chr06:3173345-3173488	0	evm.TU.Ga06G0305
+awk '$6==$1{print $4"::"$1":"$2"-"$3"\t"1"\t"$5}$6!=$1{print $4"::"$1":"$2"-"$3"\t"0"\t"$5}' 1|awk '{a[$1][0]+=$2;a[$1][1]=$3}END{for(i in a){print i"\t"a[i][0]"\t"a[i][1]}}' >5
+# 只使用包含有CG序列的片段
+# 当CG碱基数为0时，不输出
+cat 3 5 |awk '$3==""{a[$1][0]=$2}$3!=""{a[$1][1]=$2;a[$1][2]=$3}END{for(i in a){if(a[i][0]!=0){print i"\t"a[i][1]/a[i][0]"\t"a[i][2]}}}'
+
+## ExonS与intronR得改一改
+awk 'NR>1{print $0}' ../ExonS >hh
+awk '$12==$1{print $4"::"$1":"$2"-"$3"\t"1"\t"$5}$12!=$1{print $4"::"$1":"$2"-"$3"\t"0"\t"$5}' 1|awk '{a[$1][0]+=$2;a[$1][1]=$3}END{for(i in a){print i"\t"a[i][0]"\t"a[i][1]}}' >5
+
+```
+
+画图数据
+
+```bash
+awk '{print "Cons.exon\t" $2}' A2_constitutive_exon_CGratio.txt  >ggplot_data.txt
+awk '{print "Cons.intron\t"$2}' A2_constitutive_intron_CGratio.txt  >>ggplot_data.txt
+awk '{print "Alter.exon\t"$2}' A2_ExonS_CGratio.txt  >>ggplot_data.txt
+```
+
+
+
+
+
+
+
 
 
 

@@ -51,8 +51,22 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 
 + -fi 指定基因组序列文件
 + -fo 输出文件
-+ -name 从bed文件中读取基因名
-+ -bed 基因坐标
++ -name+  bed文件中的坐标作为基因名
++ -name 以bed文件中第5列作为基因名，如果第5列有重复好像就会为空
++ -bed 基因坐标文件
+
+
+
+### 提取序列中GC碱基含量
+
+这里GC含量指的是，GC碱基的占比
+
+```bash
+~/software/bedtools2-2.29.0/bin/nucBed  -fi ~/genome_data/genome_Garb.CRI/G.arboreum.Chr.v1.0.fa -bed A2_constitutive_exon.bed >1
+```
+
++ 提供参考基因组序列
++ 提供对应的位置bed信息
 
 
 
