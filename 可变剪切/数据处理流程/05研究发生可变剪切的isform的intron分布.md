@@ -130,9 +130,7 @@ done
 
 
 
-
-
-### 比较不同类型exon与intron的甲基化水平差异
+### ~~比较不同类型exon与intron的甲基化水平差异~~
 
 将CG碱基数目进行标准化，然后计算  CG methylation ratio  ，如果那段序列没有CG碱基，则不用它
 
@@ -166,6 +164,10 @@ awk '{print "Cons.exon\t" $2}' A2_constitutive_exon_CGratio.txt  >ggplot_data.tx
 awk '{print "Cons.intron\t"$2}' A2_constitutive_intron_CGratio.txt  >>ggplot_data.txt
 awk '{print "Alter.exon\t"$2}' A2_ExonS_CGratio.txt  >>ggplot_data.txt
 ```
+
+
+
+### 甲基化水平的计算换了一种方式
 
 
 
