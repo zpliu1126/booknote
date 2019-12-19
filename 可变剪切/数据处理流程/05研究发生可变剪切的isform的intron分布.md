@@ -169,6 +169,10 @@ awk '{print "Alter.exon\t"$2}' A2_ExonS_CGratio.txt  >>ggplot_data.txt
 
 ### 甲基化水平的计算换了一种方式
 
+由于测序深度的原因，一些甲基化的CG碱基可能没有被测到但是在计算的时候分母就会被认为的放大了。
+
+
+
 
 
 
