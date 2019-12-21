@@ -37,3 +37,26 @@
   | H3K9me2  | 348749   | --       |
   | H3K4me3  | 2626     | 18934    |
 
+
+
+### 提取各个区域的序列bed文件
+
+```bash
+## 提取gene区域bed文件
+awk -F "\t" '$1~/^[^#]/&&$3~/gene/{print $1,$4,$5,$7,$9}' OFS="\t" gene.Ghir.NAU.gff3|sed -e 's/ID=//g' -e 's/;.*//g' >gene.bed
+
+## 提取promote区域bed文件
+awk -F "\t" '$1~/^[^#]/&&$3~/gene/{if($7=="+"&&$4>=2000){print $1,$4-2000,$4,$7,$9}else if($7=="+"&&$4<2000){print $1,0,$4,$7,$9}else if($7=="-"){{print $1,$5,$5+2000,$7,$9}}}' OFS="\t" gene.Ghir.NAU.gff3|sed -e 's/ID=//g' -e 's/;.*//g' >promte.bed
+
+## 提取promote和gene区
+awk -F "\t" '$1~/^[^#]/&&$3~/gene/{if($7=="+"&&$4>=2000){print $1,$4-2000,$5,$7,$9}else if($7=="+"&&$4<2000){print $1,0,$5,$7,$9}else if($7=="-"){{print $1,$4,$5+2000,$7,$9}}}' OFS="\t" gene.Ghir.NAU.gff3|sed -e 's/ID=//g' -e 's/;.*//g' >int.bed
+
+##提取外显子区域
+awk -F "\t" '$1~/^[^#]/&&$3~/exon/{print $1,$4,$5,$7,$9}' OFS="\t" gene.Ghir.NAU.gff3|sed -e 's/ID=//g' -e 's/;.*//g' -e 's/\..*//g' >exon.bed
+
+```
+
+
+
+
+
