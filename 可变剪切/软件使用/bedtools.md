@@ -30,12 +30,8 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
   intersectBed  -a CpG_context_D1.bed -b exon_3.bed -loj|less
   ## 获取匹配的行，会将b文件写在后面
   ```
-```
-  
-  
 
 
-```
 
 
 
