@@ -19,7 +19,38 @@
 
 ### 同源基因中IR事件数目的统计
 
-
+```bash
+## 将所有棉种的IR事件合并到一个文件中
+awk '$3~/IntronR/{print $2}' ../TM-1/end_third |sort |uniq -c |awk '{print $2"\t"$1}' >intronR_count.txt 
+awk '$3~/IntronR/{print $2}' ../D5/end_third |sort |uniq -c |awk '{print $2"\t"$1}' >>intronR_count.txt 
+awk '$3~/IntronR/{print $2}' ../A2/end_third  |sort |uniq -c |awk '{print $2"\t"$1}' >>intronR_count.txt
+## 之后使用自己写的python脚本跑
+python Count_homologe_IRcount.py  intronR_count.txt ../GhDt_Gr_GhAt_Ga_end_noScaffold  1 
+```
 
 ### 比较频数相差不大的这些基因中比较保守的IR事件
+
+#### 1.首先都没有发生IR事件的同源基因
+
+```bash 
+awk '$2==0&&$4==0&&$6==0&&$8==0{print $0}' 1
+```
+
+#### 2.都发生了IR事件但是数目上相差不超过log2 阀值
+
+```bash
+awk '$2!=0&&$4!=0&&$6!=0&&$8!=0{if(($2/$4<2&&$2/$4>0.5)&&($2/$6<2&&$2/$6>0.5)&&($2/$8<2&&$2/$8>0.5)&&($4/$6<2&&$4/$6>0.5)&&($4/$6<2&&$4/$8>0.5)&&($6/$8<2&&$6/$8>0.5)){print $0}}' 1
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
