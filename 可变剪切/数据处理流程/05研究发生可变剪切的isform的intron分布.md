@@ -165,17 +165,72 @@ awk '{print "Cons.intron\t"$2}' A2_constitutive_intron_CGratio.txt  >>ggplot_dat
 awk '{print "Alter.exon\t"$2}' A2_ExonS_CGratio.txt  >>ggplot_data.txt
 ```
 
-
+***2019-12-21***
 
 ### 甲基化水平的计算换了一种方式
 
 由于测序深度的原因，一些甲基化的CG碱基可能没有被测到但是在计算的时候分母就会被认为的放大了。
 
+使用bedtools intersect 对甲基化文件和intron文件取交集,之前跑的多重检验就认为只有p-value达到了1e-5就可以了
+
+```bash
+## 构造甲基化的bed文件
+awk '{print $1,$2,$2,$3,$4,$5}' OFS="\t" >CpG_context_D4_binom.bed
+## 使用intersect取交集
+intersectBed -a ../A2_constitutive_exon.bed -b CpG_context_D4_binom.bed  -wa -wb >2
+```
+
+```bash
+Chr01   100023306       100023457       -        evm.TU.Ga01G2102       Chr01   100023416       100023416       0       4       0.976215137296
+Chr01   100023306       100023457       -        evm.TU.Ga01G2102       Chr01   100023403       100023403       0       3       0.982107784
+Chr01   100023306       100023457       -        evm.TU.Ga01G2102       Chr01   100023385       100023385       0       3       0.982107784
+Chr01   100023306       100023457       -        evm.TU.Ga01G2102       Chr01   100023377       100023377       0       3       0.982107784
+Chr01   100023306       100023457       -        evm.TU.Ga01G2102       Chr01   100023348       100023348       0       3       0.982107784
+
+```
+
+```bash
+## 提取对应的甲基化ratio
+awk '{if($11<0.00001){a[$5"_"$2][0]+=1}else{a[$5"_"$2][1]+=1}}END{for(i in a){print "A2\tCons.intron\t"a[i][0]/(a[i][0]+a[i][1])}}' 1 >A2_methlation
+## 将exonS的文件转换为bed文件
+awk 'NR>1{print $1,$2,$3,$4,$5}' OFS="\t" ../ExonSstatic.txt >exonS.bed
+```
+
+### 绘制ggplot数据
+
+```R
+## 调整因子水平
+data2$V2=factor(data2$V2,levels = c("Cons.exon","Alter.exon","Cons.intron","Alter.intron"))
+## 作图
+library(ggpubr)
+library(ggplot2)
+ggplot(data2,aes(x=data2$V2,y=data2$V3,fill=data2$V2))+geom_boxplot()+stat_compare_means(comparisons = list(c("Alter.intron","Cons.intron"),c("Alter.exon","Cons.exon")))
+```
 
 
 
+#### 用bin去扫描intron区域与上下游各200bp
 
+```bash
+awk 'NR>1{print $1,$2,$3,$4,$5}' OFS="\t" ../../Intronstatic2.txt >intron.bed
+## 提取5'端200bp的片段
+awk '$4=="+"{if($2>=200){print $1,$2-200,$2,$4,$5}else{print $1,0,$2,$4,$5}}$4=="-"{print $1,$3,$3+200,$4,$5}' OFS="\t" intron.bed >5_intron.bed
+## 提取3’端200bp片段
+awk '$4=="+"{print $1,$3,$3+200,$4,$5}$4=="-"{if($2>=200){print $1,$2-200,$2,$4,$5}else{print $1,0,$2,$4,$5}}' OFS="\t" intron.bed >3_intron.bed
+## 将每个区域划分为15个bin
+~/software/bedtools2-2.29.0/bin/windowMaker  -n 15 -b intron.bed -i winnum >分割好的bed文件
+## 计算每个bin区域对应的平均甲基化值
+~/software/bedtools2-2.29.0/bin/intersectBed -a 5_intron_bin.bed  -b ../CpG_context_D4_binom.bed  -loj >5
+## 最后除的是intron的总数
+awk '$10!="."{if($10<0.00001){a[$2"_"$4][0]+=1}else{a[$2"_"$4][1]+=1}}END{for(i in a){print i"\t"a[i][0]/(a[i][0]+a[i][1])}}' 3|sed 's/_/\t/g'|awk '{a[$2]+=$3}END{for(i in a){print "Cons.intron\t"i+30"\t"a[i]/27800}}'
 
+```
+
+![CpG甲基化差异](https://s2.ax1x.com/2019/12/21/Qv4Q5F.png)
+
+#### 对CHG和CHH甲基化类型作同样的操作
+
+![CHG甲基化的差异](https://s2.ax1x.com/2019/12/21/Qvqi1U.png)
 
 
 

@@ -33,10 +33,6 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 
 
 
-
-
-
-
 ### fastaFromBed
 
 根据基因组位置来提取对应的fasta序列
@@ -63,6 +59,26 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 
 + 提供参考基因组序列
 + 提供对应的位置bed信息
+
+
+
+### windowMaker
+
++ `-g` 或者`b`指定输入文件类型
++ `-w`指定窗口大小
++ `-s`指定滑动的窗口大小，不指定的话就等于 -w参数大小
++ `-n`固定窗口数目
++ `-i`指定输出文件的id号
+
+```bash
+### 如果指定的是genome文件
+	For example, Human (hg19):
+	chr1	249250621
+	chr2	243199373
+
+```
+
+
 
 
 
