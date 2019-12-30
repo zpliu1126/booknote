@@ -80,7 +80,7 @@ awk '{a+=$4}END{print a/事件数目}' evolution/converse_AltD.bed
 
 ### 对可变剪切进行分类还是使用剪切位点上下游各300bp组成的序列进行blast
 
-提取剪切位点上下游各300bp的序列
+提取剪切位点上下游各300bp的序列，叫做***splice anchor sequence tags***  
 
 ```bash
 ## 提取上游300bp序列
@@ -148,7 +148,7 @@ awk '$11==0&&$2!~/Ghir_A.*/{print $0}' At_query_blast.txt |awk '$2~/evm/{a[$1][0
 cat IR_bed/*Dt*|awk -F "\t" '$5~/Ghir_D/{print $5}' |sort |uniq |awk '{print ">"$0}'|cat - Dt_intron_junction.fasta |grep ">"|sort|uniq -u|sed 's/>//g' |awk -F "_" '{print $3"_"$4,$5,$6,$8,$0}' OFS="\t" >noconverse/Dt_IR.bed
 
 ## 只在D5中出现的
-cat IR_bed/*D5* |awk -F "\t" '$5~/Gor/{print $5}' |sort |uniq |awk '{print ">"$0}'|cat - D5_intron_junction.fasta |grep ">"|sort|uniq -u|sed 's/>//g' |awk -F "_" '{print $2,$3,$4,$6,$0}' OFS="\t"  >noconverse/Dt5_IR.bed
+cat IR_bed/*D5* |awk -F "\t" '$5~/Gor/{print $5}' |sort |uniq |awk '{print ">"$0}'|cat - D5_intron_junction.fasta |grep ">"|sort|uniq -u|sed 's/>//g' |awk -F "_" '{print $2,$3,$4,$6,$0}' OFS="\t"  >noconverse/D5_IR.bed
 ## 只在A2中出现,非保守的剪切事件
 cat IR_bed/*A2*|awk -F "\t" '$5~/evm/{print $5}' |sort |uniq |awk '{print ">"$0}'|cat - A2_intron_junction.fasta |grep ">"|sort|uniq -u|sed 's/>//g' |awk -F "_" '{print $2,$3,$4,$6,$0}' OFS="\t" >noconverse/A2_IR.bed
 ## 只在At中出现
@@ -221,6 +221,32 @@ cut -f5 all_converse.bed |awk -F "_" '$1~/Ghir/{print $1"_"$2}$1!~/Ghir/{print $
 cat converse/* |sort|uniq |awk -F "_" '{print $(NF-1)}'|less
 cat noconverse/* |sort|uniq |awk -F "_" '{print $(NF-1)}'|less
 ```
+
+
+
+***219 12 30***
+
+师兄说不能只根据 evalue 来筛选保守的片段，得看相似度和覆盖度
+
+```bash
+## 将相似度与覆盖度的指标写进结果内
+blastn -query D5_intron_junction.fasta  -db blastDB/intron_junction -outfmt "6  qseqid sseqid qstart qend sstart send nident pident qcovs evalue bitscore"  -evalue 1e-5  -out D5_query_blast.txt
+## 这个筛选的指标感觉还可以
+awk '$7>200&&$8>90&&$9>85{print $0}' At_query.blast.txt
+```
+
+
+
+把筛选的命令重新写一遍
+
+```bash
+## 都保守的事件，根据相似度和覆盖度筛选
+awk '$7>200&&$8>90&&$9>85&&$2!~/Ghir_D.*/{print $0}' Dt_query_blast.txt |awk '$2~/Ghir_A/{a[$1][0]+=1}$2~/evm/{a[$1][2]+=1}$2~/Gor/{a[$1][1]+=1}END{for(i in a){if(a[i][0]>=1&&a[i][2]>=1&&a[i][1]>=1)print i}}' 
+```
+
+
+
+
 
 
 
