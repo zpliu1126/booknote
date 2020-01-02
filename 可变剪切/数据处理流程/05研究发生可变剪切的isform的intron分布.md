@@ -218,11 +218,15 @@ awk '$4=="+"{if($2>=200){print $1,$2-200,$2,$4,$5}else{print $1,0,$2,$4,$5}}$4==
 ## 提取3’端200bp片段
 awk '$4=="+"{print $1,$3,$3+200,$4,$5}$4=="-"{if($2>=200){print $1,$2-200,$2,$4,$5}else{print $1,0,$2,$4,$5}}' OFS="\t" intron.bed >3_intron.bed
 ## 将每个区域划分为15个bin
-~/software/bedtools2-2.29.0/bin/windowMaker  -n 15 -b intron.bed -i winnum >分割好的bed文件
+~/software/bedtools2-2.29.0/bin/windowMaker  -n 15 -i winnum -b intron.bed  >分割好的bed文件
 ## 计算每个bin区域对应的平均甲基化值
 ~/software/bedtools2-2.29.0/bin/intersectBed -a 5_intron_bin.bed  -b ../CpG_context_D4_binom.bed  -loj >5
 ## 最后除的是intron的总数
 awk '$10!="."{if($10<0.00001){a[$2"_"$4][0]+=1}else{a[$2"_"$4][1]+=1}}END{for(i in a){print i"\t"a[i][0]/(a[i][0]+a[i][1])}}' 3|sed 's/_/\t/g'|awk '{a[$2]+=$3}END{for(i in a){print "Cons.intron\t"i+30"\t"a[i]/27800}}'
+
+awk '$10!="."{if($10<0.00001){a[$2"_"$4][0]+=1}else{a[$2"_"$4][1]+=1}}END{for(i in a){print i"\t"a[i][0]/(a[i][0]+a[i][1])}}' 5|sed 's/_/\t/g'|awk '{a[$2]+=$3}END{for(i in a){print "Cons.intron\t"i"\t"a[i]/27800}}'
+
+awk '$10!="."{if($10<0.00001){a[$2"_"$4][0]+=1}else{a[$2"_"$4][1]+=1}}END{for(i in a){print i"\t"a[i][0]/(a[i][0]+a[i][1])}}' intron|sed 's/_/\t/g'|awk '{a[$2]+=$3}END{for(i in a){print "Cons.intron\t"i+16"\t"a[i]/27800}}'
 
 ```
 
