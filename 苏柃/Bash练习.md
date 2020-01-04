@@ -103,3 +103,48 @@ ATGTTGAAACAAGATGGAACTCTGTGTTCCTTCTCACCGTGCATGGAGCAAGTGCAACGTTCATGTGAAACTCTGAGATC
 
 
 
+
+
+### 比较上下几行范围的内容
+
+找出异常值
+
+```bash
+awk '{array[NR]=$0}END{
+for(i=2;i<=4507;i++){
+split(array[i-1],tmp1,"\t");
+split(array[i],tmp,"\t");
+split(array[i+1],tmp2,"\t");
+if((tmp2[7]-tmp1[7]<2000000||tmp2[7]-tmp1[7]>-2000000)&&(tmp[7]-tmp1[7]>2000000||tmp[7]-tmp1[7]<-2000000)&&(tmp[7]-tmp2[7]>2000000||tmp[7]-tmp2[7]<-2000000)){
+print array[i]
+}else if((tmp2[7]-tmp1[7]>2000000||tmp2[7]-tmp1[7]<-2000000)&&(tmp[7]-tmp1[7]>2000000||tmp[7]-tmp1[7]<-2000000)&&(tmp[7]-tmp2[7]>2000000||tmp[7]-tmp2[7]<-2000000)){
+print array[i]
+}else{
+
+}}
+}' D5Chr01_vs_A2_coords.txt
+
+```
+
+除异常值以外的值
+
+```bash
+awk '{array[NR]=$0}END{
+print array[1];
+for(i=2;i<=4507;i++){
+split(array[i-1],tmp1,"\t");
+split(array[i],tmp,"\t");
+split(array[i+1],tmp2,"\t");
+if((tmp2[7]-tmp1[7]<2000000||tmp2[7]-tmp1[7]>-2000000)&&(tmp[7]-tmp1[7]>2000000||tmp[7]-tmp1[7]<-2000000)&&(tmp[7]-tmp2[7]>2000000||tmp[7]-tmp2[7]<-2000000)){
+
+}else if((tmp2[7]-tmp1[7]>2000000||tmp2[7]-tmp1[7]<-2000000)&&((tmp[7]-tmp1[7]>2000000||tmp[7]-tmp1[7]<-2000000)&&(tmp[7]-tmp2[7]>2000000||tmp[7]-tmp2[7]<-2000000))){
+
+}else{
+print array[i]
+}}
+print array[4508]
+}' D5Chr01_vs_A2_coords.txt
+```
+
+
+
