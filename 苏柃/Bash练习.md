@@ -103,6 +103,34 @@ ATGTTGAAACAAGATGGAACTCTGTGTTCCTTCTCACCGTGCATGGAGCAAGTGCAACGTTCATGTGAAACTCTGAGATC
 
 
 
+### 将注释信息与基因坐标信息放一起
+
+输入数据
+
+```bash
+
+```
+
+
+
+```bash
+awk '$0~/Alignment/{a=$0}$1~/^[^#]/{print $0"\t"a}' 2
+```
+
+输出数据
+
+```bash
+
+```
+
+
+
+### 将注释信息单独放在一行
+
+```bash
+awk '{print "## "$7"\n"$0}' link.txt |awk 'NR==1{tmp=$0;print tmp}$1~/^#/{if(tmp!=$0){tmp=$0;print tmp}}$1~/^[^#]/{print $0}' |less
+```
+
 
 
 ### 比较上下几行范围的内容
@@ -111,7 +139,7 @@ ATGTTGAAACAAGATGGAACTCTGTGTTCCTTCTCACCGTGCATGGAGCAAGTGCAACGTTCATGTGAAACTCTGAGATC
 
 ```bash
 awk '{array[NR]=$0}END{
-for(i=2;i<=4507;i++){
+for(i=2;i<=NR-1;i++){
 split(array[i-1],tmp1,"\t");
 split(array[i],tmp,"\t");
 split(array[i+1],tmp2,"\t");
@@ -131,7 +159,7 @@ print array[i]
 ```bash
 awk '{array[NR]=$0}END{
 print array[1];
-for(i=2;i<=4507;i++){
+for(i=2;i<=NR-1;i++){
 split(array[i-1],tmp1,"\t");
 split(array[i],tmp,"\t");
 split(array[i+1],tmp2,"\t");
@@ -142,7 +170,7 @@ if((tmp2[7]-tmp1[7]<2000000||tmp2[7]-tmp1[7]>-2000000)&&(tmp[7]-tmp1[7]>2000000|
 }else{
 print array[i]
 }}
-print array[4508]
+print array[NR]
 }' D5Chr01_vs_A2_coords.txt
 ```
 
