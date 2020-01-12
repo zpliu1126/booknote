@@ -95,14 +95,6 @@ conda install -n SplAdder numpy -y
 
    `conda install --use-local  ....tar.bz`安装
 
-
-
-### python 中参数解析
-
- https://www.jianshu.com/p/0361cd8b8fec 
-
-
-
 ### 参考
 
 [https://heary.cn/posts/%E5%9C%A8Shell%E6%88%96Bat%E8%84%9A%E6%9C%AC%E4%B8%AD%E6%BF%80%E6%B4%BBconda%E7%8E%AF%E5%A2%83/](https://heary.cn/posts/在Shell或Bat脚本中激活conda环境/)

@@ -8,20 +8,6 @@
 
 参考作者的解决办法加上 `-nonamecheck`参数
 
-
-
-### fastaFromBed
-
-根据bed1文件读取基因序列
-
-***序号注意的细节是，bed从0开始计数，而gff文件中序列的坐标是从0开始的，因此使用gff中的坐标做bed文件时会存在一个碱基的误差**
-
-```bash
-fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提取对应的正负链
-```
-
-
-
 ### intersectBed
 
 + 比较A文件与B文件是否有交集，有则将文件A与文件B输出在同一行，若无交集则输出A文件位置其余对于的位置使用-1补齐
@@ -37,6 +23,8 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 
 根据基因组位置来提取对应的fasta序列
 
+**序号注意的细节是，bed从0开始计数，而gff文件中序列的坐标是从0开始的，因此使用gff中的坐标做bed文件时会存在一个碱基的误差**
+
 ```bash
 ~/software/bedtools2-2.29.0/bin/fastaFromBed -fi ~/genome_data/genome_Garb.CRI/G.arboreum.Chr.v1.0.fa  -fo 1 -name -bed A2_intronR.txt
 ```
@@ -46,6 +34,7 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 + -name+   以bed文件中的坐标作为基因名
 + -name 以bed文件中第4列作为基因名，如果第4列有重复好像就会为空
 + -bed 基因坐标文件
++ -s 提取对应的正负链
 
 :warning: 从使用bedtools提取的时候，开始坐标不会被提取所以会少掉一个碱基。
 
@@ -77,7 +66,6 @@ fastaFromBed -fi 基因组序列文件 -fo 输出文件 -bed 坐标文件 -s 提
 	For example, Human (hg19):
 	chr1	249250621
 	chr2	243199373
-
 ```
 
 
