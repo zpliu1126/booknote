@@ -24,5 +24,14 @@
 
   这两种甲基化的方式分别决定了常染色质（**RdDM**）与异染色质区域（**CMT2**）的CHH甲基化水平
 
-  棉花纤维作为一种可再生的纺织原料，是用于研究从胚珠表皮细胞向快速伸长的纤维细胞发育的绝佳模型。世界上广泛栽培的异源四倍体陆地棉**AADD**，大约是起源于1~2百万年前的杂交加倍；其中A基因组
+  棉花纤维作为一种可再生的纺织原料，是用于研究从胚珠表皮细胞向快速伸长的纤维细胞发育的绝佳模型。世界上广泛栽培的异源四倍体陆地棉**AADD**，大约是起源于1~2百万年前的杂交加倍；其中A基因组与  Gossypium herbaceum or Gossypium arboretum  类似；D基因组与  Gossypium raimondii  类似。四倍体内基因组间的相互作用，诱导产生更长的纤维和更高的产量，这也与纤维发育相关的基因存在表达偏向性相关的现象一致，为棉花和许多异源多倍体植物提供了驯化选择的基础。
+  
+  + 各种甲基化的表达模式
+
+>   CG, CHG, and CHH methylation patterns  
+
++ 一个基因不同区域之间甲基化水平的差异
+
+>   the gene body and 5’ and 3’ flanking sequences were comparatively analyzed
+> with TE densities   
 
