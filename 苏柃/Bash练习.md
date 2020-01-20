@@ -108,12 +108,6 @@ ATGTTGAAACAAGATGGAACTCTGTGTTCCTTCTCACCGTGCATGGAGCAAGTGCAACGTTCATGTGAAACTCTGAGATC
 输入数据
 
 ```bash
-
-```
-
-
-
-```bash
 awk '$0~/Alignment/{a=$0}$1~/^[^#]/{print $0"\t"a}' 2
 ```
 
@@ -175,4 +169,15 @@ print array[NR]
 ```
 
 
+
+### 2020-01-19
+
+根据gff文件提取gene body 区域坐标和上游 3Kb 的promoter 区域坐标
+
+```bash
+## 提取基因坐标
+awk -F ";" '{print $1}' ../../Ghirsutum_gene_model.gff3|awk -F "\t" '$3~/gene/{print $1,$4,$5,$9}' OFS="\t" |sed 's/ID=//g' >gene.bed
+## 提取promoter区域
+    awk -F ";" '{print $1}' ../../Ghirsutum_gene_model.gff3|awk -F "\t" '$3~/gene/&&$7=="-"{print $1,$5+1,$5+3000,$9}$3~/gene/&&$7=="+"{if($4>3000){print $1,$4-3000,$4-1,$9}else{print $1,1,$4-1,$9}}' OFS="\t" |sed 's/ID=//g' >gene_promter.bed
+```
 
