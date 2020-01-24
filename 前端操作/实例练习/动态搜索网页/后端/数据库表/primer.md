@@ -20,6 +20,7 @@
 + 分子量
 + GC含量
 + 公司名字
++ 序列
 
 ### 创建mysql 表
 
@@ -31,10 +32,11 @@ create TABLE IF not exists primer(
   subscriber VARCHAR(20) not NULL,
   teacher VARCHAR(20) not NULL,
   order_number VARCHAR(50) not NULL,
-  list_number VARCHAR(20) NULL ,
+  sequence VARCHAR(100) not NULL,
+  list_number VARCHAR(20) NULL default "None" ,
   synthesis_num VARCHAR(20) not NULL,
-  2thID VARCHAR(20) default "None" ,
-  3thID VARCHAR(20) default "None",
+  secondID VARCHAR(20) default "None" ,
+  thirdID VARCHAR(20) default "None",
   primerName VARCHAR(30) default "None",
   baseCount int default 0,
   tubeCount int default 0,
@@ -54,28 +56,29 @@ create TABLE IF not exists primer(
 
 ```bash
 mysql> describe primer;
-+---------------------+-------------+------+-----+---------+-------+
-| Field               | Type        | Null | Key | Default | Extra |
-+---------------------+-------------+------+-----+---------+-------+
-| subscriber          | varchar(20) | NO   |     | NULL    |       |
-| teacher             | varchar(20) | NO   |     | NULL    |       |
-| order_number        | varchar(50) | NO   |     | NULL    |       |
-| list_number         | varchar(20) | YES  |     | NULL    |       |
-| synthesis_num       | varchar(20) | NO   |     | NULL    |       |
-| 2thID               | varchar(20) | YES  |     | None    |       |
-| 3thID               | varchar(20) | YES  |     | None    |       |
-| primerName          | varchar(30) | YES  |     | None    |       |
-| baseCount           | int         | YES  |     | 0       |       |
-| tubeCount           | int         | YES  |     | 0       |       |
-| contentCount        | float       | YES  |     | 0       |       |
-| decoratePattern     | varchar(20) | YES  |     | None    |       |
-| purificationPattern | varchar(20) | YES  |     | None    |       |
-| ThioCount           | int         | YES  |     | 0       |       |
-| TMValue             | float       | YES  |     | 0       |       |
-| MolecularWeight     | float       | YES  |     | 0       |       |
-| GCContent           | float       | YES  |     | 0       |       |
-| company             | varchar(20) | NO   |     | NULL    |       |
-+---------------------+-------------+------+-----+---------+-------+
++---------------------+--------------+------+-----+---------+-------+
+| Field               | Type         | Null | Key | Default | Extra |
++---------------------+--------------+------+-----+---------+-------+
+| subscriber          | varchar(20)  | NO   |     | NULL    |       |
+| teacher             | varchar(20)  | NO   |     | NULL    |       |
+| order_number        | varchar(50)  | NO   | PRI | NULL    |       |
+| sequence            | varchar(100) | NO   |     | NULL    |       |
+| list_number         | varchar(20)  | YES  |     | None    |       |
+| synthesis_num       | varchar(20)  | NO   |     | NULL    |       |
+| secondID            | varchar(20)  | YES  |     | None    |       |
+| thirdID             | varchar(20)  | YES  |     | None    |       |
+| primerName          | varchar(30)  | YES  |     | None    |       |
+| baseCount           | int          | YES  |     | 0       |       |
+| tubeCount           | int          | YES  |     | 0       |       |
+| contentCount        | float        | YES  |     | 0       |       |
+| decoratePattern     | varchar(20)  | YES  |     | None    |       |
+| purificationPattern | varchar(20)  | YES  |     | None    |       |
+| ThioCount           | int          | YES  |     | 0       |       |
+| TMValue             | float        | YES  |     | 0       |       |
+| MolecularWeight     | float        | YES  |     | 0       |       |
+| GCContent           | float        | YES  |     | 0       |       |
+| company             | varchar(20)  | NO   |     | NULL    |       |
++---------------------+--------------+------+-----+---------+-------+
 ```
 
 
