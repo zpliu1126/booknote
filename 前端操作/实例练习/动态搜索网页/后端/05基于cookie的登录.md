@@ -23,6 +23,27 @@ rep.cookie("cart","dasdas",{maxAge:20000})
 rep.redirect("/")
 ```
 
+### 4.cookie传中文
+
+1. 服务端对中文进行unicode编码
+2. 客户端进行解码
+
+```bash
+
+let chineseName=escape("刘振平")
+      rep.cookie("chineseName","刘振平",{
+        signed:false,
+        maxAge:86400000*7,
+      })
+```
+
+客户端解码
+
+```bash
+ # 后端得先把中文编码再使用cookie发送，应为cookie这个包对中文的编码不支持
+let subscriber =unescape(unescape(document.cookie.split("chineseName=")[1]));
+```
+
 
 
 其中option要求是要json格式：有以下选项

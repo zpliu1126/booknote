@@ -97,7 +97,13 @@ alter table primer add primary key (order_number);
 ### 4.插入数据
 
 ```bash
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company) VALUES ("张襄南","涂礼莉","WHP20190613-3057","WHP2019060017681","金斯瑞");
+ INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("张襄南","涂礼莉","WHP20190613-3057","WHP2019060017681","金斯瑞","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("张襄南","涂礼莉","WHP20190612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("李中华","涂礼莉","WHP20180612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("赵冠男","涂礼莉","WHP20190512-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("赵陈鑫媛","王茂军","WHP20190612-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("裴柳玲","王茂军","WHP20190912-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("刘振平","王茂军","WHP20190012-3057","WHP2019060017681","Vue","ATAGCCGGAGAGAGT");
 ```
 
 ### 5.数据查询

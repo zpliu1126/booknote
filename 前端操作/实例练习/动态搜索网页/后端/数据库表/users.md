@@ -1,5 +1,13 @@
 # 用户登录表
 
+```sql
+create user 'BioCotton'@'localhost' identified by '密码'; BioCotton39558728cotton@
+## root权限下新建数据库
+create database bioinformatic character set utf8;
+## 赋予权限
+grant all privileges on bioinformatic.* to 'BioCotton'@'localhost';
+```
+
 ### 最简单的表结构开始
 
 1. `id`

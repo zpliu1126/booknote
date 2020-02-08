@@ -26,5 +26,17 @@ nameserver 8.8.4.4
 
 
 
+### 根据端口号杀死程序
+
+```bash
+### 获取端口号
+netstat -lnp|grep 80
+#tcp        0      0 :::80                       :::*                        LISTEN      35894/node 
+### 杀死对应程序
+
+```
+
+
+
 
 
