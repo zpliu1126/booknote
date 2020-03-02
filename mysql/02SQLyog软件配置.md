@@ -31,7 +31,14 @@
 
 
 
+### `SQLyog`快捷键
+
++ F9执行sql语句
++ F12格式化sql语句
++ TAB 自动补全
+
 ### 参考
 
 1. SQLyog 破解版  https://blog.csdn.net/lihua5419/article/details/73881837/ 
 2. 使用xshell进行端口转发
+3. SQLyog快捷键  https://www.cnblogs.com/huaxingtianxia/p/5711521.html 
