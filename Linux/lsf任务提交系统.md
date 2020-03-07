@@ -111,4 +111,5 @@ python extract_count2.py 111111.gz 2222.gz //要运行的脚本
 ### 参考
 
 1. https://blog.csdn.net/cy413026/article/details/84649514 
+2.  [https://www.ibm.com/developerworks/cn/linux/l-lo-efficient-cluster-manage-system-LSF/index.html#1%E7%AE%80%E5%8D%95%E7%9A%84%E4%BD%BF%E7%94%A8outline](https://www.ibm.com/developerworks/cn/linux/l-lo-efficient-cluster-manage-system-LSF/index.html#1简单的使用outline) 
 

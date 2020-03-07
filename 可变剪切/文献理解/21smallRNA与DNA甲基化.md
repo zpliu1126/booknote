@@ -35,3 +35,11 @@
 >   the gene body and 5’ and 3’ flanking sequences were comparatively analyzed
 > with TE densities   
 
+
+
+### 参考
+
+1. Dynamic Roles for Small RNAs and DNA Methylation during Ovule and Fiber Development in Allotetraploid Cotton
+
+
+

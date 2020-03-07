@@ -2,8 +2,6 @@
 
 主要字段
 
-+ 订购者名字
-+ 课题组老师名字
 + 订单号
 + 单号
 + 合成编号
@@ -97,13 +95,13 @@ alter table primer add primary key (order_number);
 ### 4.插入数据
 
 ```bash
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("张襄南","涂礼莉","WHP20190613-3057","WHP2019060017681","金斯瑞","ATAGCCGGAGAGAGT");
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("张襄南","涂礼莉","WHP20190612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("李中华","涂礼莉","WHP20180612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
-  INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("赵冠男","涂礼莉","WHP20190512-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("赵陈鑫媛","王茂军","WHP20190612-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
- INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("裴柳玲","王茂军","WHP20190912-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
-  INSERT  into primer (subscriber,teacher,order_number,synthesis_num,company,sequence) VALUES ("刘振平","王茂军","WHP20190012-3057","WHP2019060017681","Vue","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190613-3057","WHP2019060017681","金斯瑞","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20180612-3057","WHP2018060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20190512-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20190612-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190912-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (11,"WHP20190012-3057","WHP2019060017681","Vue","ATAGCCGGAGAGAGT");
 ```
 
 ### 5.数据查询
@@ -149,4 +147,98 @@ function searchByKeyword(keyword ,callback){
 ```
 
 
+
+### 使用用户id作为外键约束
+
+```sql
+create TABLE IF not exists primer(
+  subscriber int not NULL,
+  constraint fk_primer_user_id FOREIGN KEY (`subscriber`) REFERENCES `user` (`id`),
+  order_number VARCHAR(50) not NULL,
+  sequence VARCHAR(100) not NULL,
+  list_number VARCHAR(20) NULL default "None" ,
+  synthesis_num VARCHAR(20) not NULL,
+  secondID VARCHAR(20) default "None" ,
+  thirdID VARCHAR(20) default "None",
+  primerName VARCHAR(30) default "None",
+  baseCount int default 0,
+  tubeCount int default 0,
+  contentCount float default 0.0,
+  decoratePattern VARCHAR(20) default "None",
+  remark VARCHAR(200) default "None",
+  purificationPattern VARCHAR(20) default "None",
+  ThioCount int default 0,
+  TMValue float default 0.0,
+  MolecularWeight float default 0.0,
+  GCContent float default 0.0,
+  company VARCHAR(20) not NULL,
+  primary key(order_number)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+####　插入数据
+
+```bash
+INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190613-3057","WHP2019060017681","金斯瑞","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190612-3057","WHP2019060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20180612-3057","WHP2018060017681","Hi-Tom","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20190512-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (6,"WHP20190612-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+ INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (1,"WHP20190912-3057","WHP2019060017681","华大基因","ATAGCCGGAGAGAGT");
+  INSERT  into primer (subscriber,order_number,synthesis_num,company,sequence) VALUES (11,"WHP20190012-3057","WHP2019060017681","Vue","ATAGCCGGAGAGAGT");
+```
+
+
+
+#### 批量插入多行数据
+
++ 使用嵌套数组
+
+```bash
+[
+[item1],
+[item2]
+]
+```
+
++ sql模板语句的写法
+  + sql语句中values后没有小括号
+
+```sql
+INSERT into table_name (columns) VALUES ?
+```
+
++ 查询函数
+  + 注意嵌套数组外面还要加一对中括号
+
+```bash
+connection.query(sql,[insertArray],function(err,result){})
+```
+
+
+
+
+
+
+
+### 按账户查询
+
+```bash
+ select user.chineseName,teacher.teacher_name from teacher,primer  left join user on primer.subscriber=user.id where user.teacherId=teacher.id AND user.id='1';
+```
+
+
+
+#### 清空表
+
+```sql
+truncate table primer;
+```
+
+
+
+### 参考
+
+1.  https://blog.csdn.net/qq_29229567/article/details/82743645 
+2.  批量插入  https://blog.csdn.net/lym152898/article/details/78246230 
 
