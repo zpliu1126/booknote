@@ -12,7 +12,7 @@
 
 在使用xshell连接到目标服务器之后，进信号转发到本地端口
 
-![配置端口转发](https://s2.ax1x.com/2020/02/27/3d3lgf.png)
+![配置端口转发](https://s2.ax1x.com/2020/03/07/3XUGfH.png))
 
 #### 2.2SQLyog通过xshell转发端口连接目标服务器
 
