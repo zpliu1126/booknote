@@ -17,21 +17,21 @@
 + 点击魔方图标，搜索关键字`remote-ssh`
 + 下载对应的插件即可
 
-[![插件下载](https://s2.ax1x.com/2020/03/07/3XwhHP.png)](https://imgchr.com/i/3XwhHP)
+![插件下载](https://s2.ax1x.com/2020/03/07/3XwhHP.png)
 
 ### 2.使用`Remote-SSH`连接·服务器
 
 #### 2.1如下所示进行信息的配置
 
-![3Xdbex.png](https://s2.ax1x.com/2020/03/07/3Xdbex.png)
+#### ![3Xdbex.png](https://s2.ax1x.com/2020/03/07/3Xdbex.png)
 
 #### 2.2配置信息如下
 
 + 如果存在墙的话，可以使用x-shell隧道将信号转发到本地
 
   参考 https://zpliu.gitbook.io/booknote/mysql/02sqlyog-ruan-jian-pei-zhi 进行隧道转发
-
-![3XdfFU.png](https://s2.ax1x.com/2020/03/07/3XdfFU.png)
+  
+  ![3XdfFU.png](https://s2.ax1x.com/2020/03/07/3XdfFU.png)
 
 
 
@@ -39,16 +39,15 @@
 
 + 密码输入后就登录成功了
 
-![3X02PU.png](https://s2.ax1x.com/2020/03/07/3X02PU.png)
+  ![3X02PU.png](https://s2.ax1x.com/2020/03/07/3X02PU.png)
 
 + 选择要显示的目录，这里需要再一次输入密码
 
   ***这里选择`.vscode`目录是方便vscode根据文件的变化情况进行自动刷新***
-
-+ [![3XBCIf.png](https://s2.ax1x.com/2020/03/07/3XBCIf.png)](https://imgchr.com/i/3XBCIf)
+ ![3XBCIf.png](https://s2.ax1x.com/2020/03/07/3XBCIf.png)](https://imgchr.com/i/3XBCIf)
 
 + 登录成功后的样子
-+ ![3XDOud.png](https://s2.ax1x.com/2020/03/07/3XDOud.png)
+ ![3XDOud.png](https://s2.ax1x.com/2020/03/07/3XDOud.png)
 
 
 
