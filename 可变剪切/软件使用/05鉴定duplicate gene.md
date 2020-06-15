@@ -169,7 +169,14 @@ awk '$0~/Alignment/{split($0,a," ");b=substr(a[6],3)}$1~/^[^#]/{print $0"\t"b}' 
 
   
 
-  
+
+
+
+
+
+
+
+
 
 
 
