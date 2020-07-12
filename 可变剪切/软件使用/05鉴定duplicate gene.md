@@ -167,7 +167,16 @@ awk '$0~/Alignment/{split($0,a," ");b=substr(a[6],3)}$1~/^[^#]/{print $0"\t"b}' 
 
 + 将找到的At、Dt基因对与A2_vs_D进行比较，过滤一遍
 
-  
+
+使用python脚本提取四组同源基因
+
+```bash
+python ~/scripte/Alternative/module/homolog/identifyFourHomolog.py -A2D5 A2_vs_D5_collinearity.txt  -AtDt At_vs_Dt_collinerity.txt  -A2At A2_vs_At_collinearity.txt  -D5Dt D5_vs_Dt_collinearity.txt -o A2_D5_At_Dt_collinearity.txt 
+```
+
+
+
+
 
 
 

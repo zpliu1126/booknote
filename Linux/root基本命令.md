@@ -38,5 +38,21 @@ netstat -lnp|grep 80
 
 
 
+### 快速删除大文件夹
+
+当一个文件夹中包含有很多小文件的时候，使用`rsync`命令快速删除文件夹
+
++ 首先创建一个空文件夹，利用这个空文件夹快速删除目标文件夹
+
+```bash
+rsync --delete-before -a -H -v --progress --stats  /home/aniya/空文件夹 目标文件夹
+```
+
+### SSH转发信号
+
+```bash
+ssh -L 4000:localhost:8889 用户@服务器主机 -p 22 -u genome
+```
+
 
 

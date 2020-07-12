@@ -84,7 +84,7 @@ conda install -n SplAdder numpy -y
    tar -xvzf ...tar.gz
    cd 包文件夹
    ## 安装
-   python setup.py install
+   python setup.py install 
    ```
 
 3. 从Ancona下载的包进行安装

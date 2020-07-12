@@ -109,3 +109,4 @@ vscode 一款让人爱不释手的IDE，也是前端工程师一大杀器。在w
 3. [Writing R in VSCode: Interacting with an R session](https://links.jianshu.com/go?to=https%3A%2F%2Frenkun.me%2F2019%2F12%2F26%2Fwriting-r-in-vscode-interacting-with-an-r-session%2F)
 4. [Remote Development using SSH](https://links.jianshu.com/go?to=https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fremote%2Fssh)
 5. [Quick start: SSH key](https://links.jianshu.com/go?to=https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fremote%2Ftroubleshooting%23_quick-start-ssh-key)
+6.  Rsudio[快捷键](https://www.jianshu.com/p/5b69c84f2bf6) 
