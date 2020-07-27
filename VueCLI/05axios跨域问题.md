@@ -30,12 +30,12 @@
 
 ```bash
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  baseURL: 'http://localhost:8080/api',
   timeout: 12000,
   headers: {
-    'content-Type': '/api',
-    Accpet: 'application/json',
-  }
+    'content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 })
 ```
 

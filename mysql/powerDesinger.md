@@ -6,8 +6,11 @@ powerDesigner是对数据库进行设计的一个软件，充分利用数据库�
 
 
 
+设置键唯一 
 
+> 参考 https://www.bbsmax.com/A/q4zVGWXbJK/
 
 ### 参考
 
 ​	1.[使用](https://www.cnblogs.com/biehongli/p/6025954.html)
+

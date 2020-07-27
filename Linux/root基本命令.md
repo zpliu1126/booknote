@@ -51,7 +51,7 @@ rsync --delete-before -a -H -v --progress --stats  /home/aniya/空文件夹 目�
 ### SSH转发信号
 
 ```bash
-ssh -L 4000:localhost:8889 用户@服务器主机 -p 22 -u genome
+ssh -L 3306:localhost:3306 账号@服务器地址 -p 22
 ```
 
 
