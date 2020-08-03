@@ -18,8 +18,6 @@ gem install sequenceserver
 >
 > 参考 https://blog.csdn.net/zoujian1993/article/details/84338443
 
-
-
 首先使用yum安装依赖
 
 ```bash
@@ -119,7 +117,7 @@ gem environment
 cd /usr/local/lib/ruby/gems/2.7.0/gems/sequenceserver-1.0.14/
 ```
 
-修改`views`目录下对应的`erb`文件，打算删除掉那个navbar，只用删除search.reb后在重新编译
+修改`views`目录下对应的`erb`文件，打算删除掉那个navbar，只用删除search.reb中的`navbar`html标签内容
 
 ### 配合JBrowse使用
 

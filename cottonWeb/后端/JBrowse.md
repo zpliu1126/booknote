@@ -2,7 +2,7 @@
 
 JBrowse是**GMOD**开源项目中的一个基因组浏览器，所谓的基因组浏览器，字面意思就可以理解成一个网页应用。可能每个生物信息分析的同学电脑内都会安装一个**IGV**，用于对高通量测序数据的可视化。其实**JBrowse**也就是相当于把**IGV**，搬到了服务器内，把庞大的测序数据存储在服务器内，借助于快速发展的web技术；使得我们能够通过仅仅发送一个网页链接就能够与他人共享或者讨论课题。
 
-> 本文搭建JBrowse应用访问链接： http://cotton.hzau.edu.cn/tools/jbrowse/
+> 本文搭建JBrowse应用访问链接： http://cotton.hzau.edu.cn/tools/jbrowse/?data=data/Ghirsutum_genome_HAU_v1.1
 
 ![吃瓜](https://s3-us-west-2.amazonaws.com/s.cdpn.io/80625/headerpic.svg)
 
@@ -140,7 +140,7 @@ type=Alignments2
 
 ### 信号转发
 
-现在访问http://cotton.hzau.edu.cn/tools/jbrowse/ 就可以显示出内网中的JBrowse
+现在访问http://cotton.hzau.edu.cn/tools/jbrowse/?data=data/Ghirsutum_genome_HAU_v1.1 就可以显示出内网中的JBrowse
 
 由于我把JBrowse放在了内网机器上，于是需要使用外网机器的Appache将内网信号转发一下；在转发后客户端找不到对应的CSS和JS文件；于是使用`webpack`重新打包了一下源代码；查看了一下webpack的配置文件，发现可以通过配置环境变量`JBROWSE_PUBLIC_PATH`的值来控制打包后的资源检索URL
 
