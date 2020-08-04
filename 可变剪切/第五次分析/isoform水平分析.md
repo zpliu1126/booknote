@@ -66,7 +66,11 @@ sed 's/[^>]*>//g' A2_merge_isoform |cut -f1 -d "-"|grep "EVM"|sort |uniq -c |awk
 sed 's/[^>]*>//g' A2_merge_isoform |cut -f1 -d "-"|grep "EVM"|sort |uniq -c|awk '{print $1"\t"$2}'  >isoform_count_gene.txt 
 ```
 
+#### 提取去冗余后的转录本的序列
 
+```bash
+python extractIsoformSeq.py  -fa Gh_isoform.fa  -isoform TM1_merge_isoform  -o TM1_merge.fa 
+```
 
 
 
