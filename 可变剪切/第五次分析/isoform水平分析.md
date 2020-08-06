@@ -72,14 +72,6 @@ sed 's/[^>]*>//g' A2_merge_isoform |cut -f1 -d "-"|grep "EVM"|sort |uniq -c|awk 
 python extractIsoformSeq.py  -fa Gh_isoform.fa  -isoform TM1_merge_isoform  -o TM1_merge.fa 
 ```
 
-
-
-
-
-
-
-
-
 ### 同源基因间保守转录本的鉴定
 
 使用github中`CD-HIT-EST`软件包进行计算；
@@ -99,7 +91,79 @@ python extractIsoformSeq.py  -fa Gh_isoform.fa  -isoform TM1_merge_isoform  -o T
 
 ```
 
+### 使用`lr2rmats`更新转录本的注释
 
+#### 安装
+
+```bash
+git clone https://github.com/Xinglab/lr2rmats.git --recursive
+cd lr2rmats
+make dependencies
+make lr2rmats
+export PATH=$PATH:$PWD/bin # To permanently modify your PATH, you need to add it to your ~/.profile or ~/.bashrc file. 
+```
+
+安装对应的依赖` snakemake`
+
+```bash
+ conda create -n  snakemake  -c conda-forge -c bioconda snakemake
+```
+
+**看了一下`Snakemake`这个配置文件，里面就不会自己调用minimap2 去建立索引，垃圾的一批；**
+
+参考文件内的命令，手动建立索引文件
+
+```bash
+# Snakemake文件内部
+"{params.minimap} -x splice {input} -d {output} -t {threads} 2> {log}"
+minimap2  -d genome.fa.mmi Ghirsutum_genome_HAU_v1.0.fasta
+##使用STAR建立基因组索引
+"{params.star} --runMode genomeGenerate --runThreadN {threads} --genomeFastaFiles {input} --genomeDir {output} --outFileNamePrefix {log} >> {log}"
+~/github/lr2rmats/bin/STAR  --runMode genomeGenerate --runThreadN 10 --genomeFastaFiles genome/G
+hirsutum_genome_HAU_v1.0.fasta  --genomeDir  ./genome.STAR/
+##修改一下文件的绝对路径，然后run起来
+snakemake -p --snakefile  ./Snakefile  --configfile ./config.yaml
+```
+
+### 输出文件
+
+在` output`文件夹中生成了几种gtf文件
+
++ `know.gtf`PacBio测的转录本在基因组注释文件中已经存在
++ `novel.gtf`PacBio测到的转录本与注释的转录本不一样，但是存在至少一个相同的剪切位点
++ `unrecog.gtf` PacBio中的剪切位点与参考基因组没有重叠
++ `updated.gtf`改进后的参考转录本信息；在原有基因组注释的基础上，加上`novel`转录本信息，并且这些新的转录本信息是由long-read和short read支持的。
+
+### 使用lr2mats注释后的PacBio转录本
+
+```bash
+##统计转录本数目
+cat samp1.novel.gtf samp1.known.gtf|awk '$3~/tran/&&$1~/Ghir/{print $0}'|wc -l
+
+##统计基因数目
+cat samp1.novel.gtf samp1.known.gtf|awk '$3~/tran/&&$1~/Ghir/{print $0}'|awk -F ";" '{print $1}'|cut -f9|grep "Ghir_A"|sort|uniq |wc -l
+```
+
+| 基因组 | 转录本数 | 基因数 | 平均每个基因转录本数 |
+| ------ | -------- | ------ | -------------------- |
+| A2     | 36485    | 16907  | 2.15                 |
+| D5     | 31368    | 16327  | 1.92                 |
+| At     | 30227    | 13134  | 2.3                  |
+| Dt     | 21437    | 13681  | 1.56                 |
+| TM1    | 51664    | 26815  | 1.92                 |
+
+#### 似乎还不是这么回事
+
+应该是获取`samp1.known.gtf`文件内的内容，在加上`update.gtf`内PacBio转录本的内容
+
+> 并且这一步的long read 数据也不需要去冗余了
+
+```bash
+### PacBio know gtf 还得去重
+sort -k1,1 -k4,5n samp1.known.gtf |uniq |cat - update.gtf |grep PB|awk '$3~/trans/&&$1~/Ghir/{print $0}'|wc -l
+## 获取下一步鉴定AS的注释文件
+sort -k1,1 -k4,5n samp1.known.gtf |uniq |cat - update.gtf |grep PB >
+```
 
 
 
