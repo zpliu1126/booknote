@@ -4,3 +4,12 @@
 
 
 
+> 根据基因编号和物种编号 请求序列信息
+>
+> API: https://www.ncbi.nlm.nih.gov/gene/?term=(ETR1%5BGene+Name%5D)+AND+%3A4565%5BTaxonomy+ID%5D
+
+包含两个筛选条件：
+
++ Gene+Name 基因名
++ Taxonomy+ID 物种ID
+

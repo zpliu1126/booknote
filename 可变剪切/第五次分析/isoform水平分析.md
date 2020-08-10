@@ -1,94 +1,16 @@
-### 转录本数目的统计
-
-统计文件`07_annotation/isoseq.info.gtf`中注释为转录本的数目
-
-```bash
-├── isoseq.info.gtf  ##PacBio isoform所有转录本的注释信息，包括lncRNA
-├── matchAnnot_result.txt  ##比对上参考基因组的转录本，不能说它就能够代表参考基因组的转录本
-├── matchannot_stat.xls  ##统计转录本数、与参考基因组对应的转录本数
-├── merge.gtf   ##把参考基因组注释转录本和PacBio转录本合并，其中参考基因组的转录本信息用PacBio进行代替
-
-awk '$3~/trans/{print $0}' isoseq.info.gtf |grep "Gh"|wc -l
-```
-
-| 基因组 | PacBio转录本数目                 |
-| ------ | -------------------------------- |
-| A2     | 71424                            |
-| D5     | 54485                            |
-| TM1    | 89411                            |
-| At     | 42382                            |
-| Dt     | 43642     ##还有一些注释为新基因 |
-
-#### 考虑去一下冗余看看效果会不会好一些，这个还是得单个单个基因跑一下试试
-
-```bash
-	/public/home/zpliu/github/cd-hit-v4.8.1-2019-0228/bin/cd-hit-est -i ../Ga_isoform.fa  -o 1111 -c 0.99 -n 10 -d 0 -M 0 -T 8
-python changeFasta.py -fa ~/work/Alternative/result/Ga_result/CO11_12_result/06_Alignment/test.fa  -gtf ~/work/Alternative/result/Ga_result/CO11_12_result/07_annotation/isoseq.info.gtf  -o Ga_isoform.fa
-##进行冗余分析
-/public/home/zpliu/github/cd-hit-v4.8.1-2019-0228/bin/cd-hit-est -i ../Ga_isoform.fa  -o 1111 -c 0.99 -n 10 -d 0 -M 0 -T 8
-##提取去冗余后的序列信息
-awk -F "," '{print $2}' A2_merge_isoform |sed -e 's/>//g' -e 's/\.\.\. \*//g'  -e 's/ //g'|xargs  -I {} grep {}   Ga_isoform.fa  -A1 >A2_merge.fa
-
-/public/home/zpliu/github/cd-hit-v4.8.1-2019-0228/bin/cd-hit-est -i A2_D5.fa -o 1111 -c 0.95 -n 10 -d 0 -M 0 -T 8
-```
-
-去重冗余后的结果
-
-| 基因组 | 去除冗余后结果 |
-| ------ | -------------- |
-| A2     | 52517          |
-| D5     | 40440          |
-| At     | 32939          |
-| Dt     | 33874          |
-| TM1    | 66950          |
-
-统计包含转录本的基因数，以及转录本大于2的基因数
-
-```bash
-##统计基因数目
-sed 's/[^>]*>//g' TM1_merge_isoform |cut -f1 -d "-"|grep "Ghir_D"|sort |uniq |wc -l
-##统计基因包含转录本的个数
-sed 's/[^>]*>//g' A2_merge_isoform |cut -f1 -d "-"|grep "EVM"|sort |uniq -c |awk '{print $1}'|sort |uniq -c
-```
-
-| 基因组 | 基因数 | 含有多个转录本的基因数 |
-| ------ | ------ | ---------------------- |
-| A2     | 21038  |                        |
-| D5     | 19001  |                        |
-| TM1    | 32182  |                        |
-| At     | 15734  |                        |
-| Dt     | 16382  |                        |
-
-> 使用matplotlib绘制直方图和密度分布图
-
-```bash
-##绘图数据
-sed 's/[^>]*>//g' A2_merge_isoform |cut -f1 -d "-"|grep "EVM"|sort |uniq -c|awk '{print $1"\t"$2}'  >isoform_count_gene.txt 
-```
-
-#### 提取去冗余后的转录本的序列
-
-```bash
-python extractIsoformSeq.py  -fa Gh_isoform.fa  -isoform TM1_merge_isoform  -o TM1_merge.fa 
-```
-
-### 同源基因间保守转录本的鉴定
+### ~CSS isoform转录本去冗余~~
 
 使用github中`CD-HIT-EST`软件包进行计算；
 
 > 代码仓库 : https://github.com/weizhongli/cdhit
-
-为了方便比较不同基因组的情况，需要把fasta的isoform id信息加上基因编号
-
-###### 计算流程
-
-+ 将`06_Alignment/all.collapsed.rep.fa`文件去除`|Ghir_A10:229-4314(+)|`等后缀
-+ 添加基因Id信息`07_annotation/isoseq.info.gtf`处理成`>Ghir_A10G000010-PB.1`
-+ 合并两个同源基因的fasta序列，用`CD-HIT`进行分析
+>
+> 参考这个wiki里的命令 ：https://github.com/Magdoll/cDNA_Cupcake/tree/master
+>
+> `cd-hit-est -i <input> -o <output> -c 0.99 -T 6 -G 0 -aL 0.90 -AL 100 -aS 0.99 -AS 30 `
 
 ```bash
-##根据去冗余后的序列鉴定同源基因间保守的isoform
-
+/public/home/zpliu/github/cd-hit-v4.8.1-2019-0228/bin/cd-hit-est -i ~/work/Alternative/result/Gh_result/CO31_32_result/04_Cluster/quivered.all.fa -o TM1_redundant.fa -c 0.99 -T 6 -G 0 -aL 0.90 -AL 100 -aS 0.99 -AS 30  -M 0
+##提取去重矫正后后的isoform序列信息
 ```
 
 ### 使用`lr2rmats`更新转录本的注释
@@ -125,6 +47,10 @@ hirsutum_genome_HAU_v1.0.fasta  --genomeDir  ./genome.STAR/
 snakemake -p --snakefile  ./Snakefile  --configfile ./config.yaml
 ```
 
+> 对于存在多个重复的RNA-seq数据，作者推荐我将它们`cat`命令合并成一个文件后，再进行跑；
+>
+> 对于长序列文件，使用的是FLNC 的CSS序列`04_Cluster/all.quivered.fa`而不是拼接好的PacBio isoform序列
+
 ### 输出文件
 
 在` output`文件夹中生成了几种gtf文件
@@ -134,38 +60,56 @@ snakemake -p --snakefile  ./Snakefile  --configfile ./config.yaml
 + `unrecog.gtf` PacBio中的剪切位点与参考基因组没有重叠
 + `updated.gtf`改进后的参考转录本信息；在原有基因组注释的基础上，加上`novel`转录本信息，并且这些新的转录本信息是由long-read和short read支持的。
 
-### 使用lr2mats注释后的PacBio转录本
+### 使用lr2mats对CSS矫正后的isoform
 
 ```bash
-##统计转录本数目
-cat samp1.novel.gtf samp1.known.gtf|awk '$3~/tran/&&$1~/Ghir/{print $0}'|wc -l
-
-##统计基因数目
-cat samp1.novel.gtf samp1.known.gtf|awk '$3~/tran/&&$1~/Ghir/{print $0}'|awk -F ";" '{print $1}'|cut -f9|grep "Ghir_A"|sort|uniq |wc -l
+###samp1.known.gtf,与基因组中已有的注释一致的isoform
+awk '$3~/tran/{print $0}' samp1.known.gtf|wc -l
+###samp1.novel.gtf, PacBio检测到的新的isoform，但最终不一定会使用，还是得从update.gtf文件中抽取出来的准确
+awk '$3~/tran/{print $0}' update.gtf|wc -l
+### 提取文件作为PacBio注释信息
+grep -E "c([^\/]*)\/" update.gtf| cat - samp1.known.gtf  >../../../../allAS/Ga/PacBio.gtf
 ```
 
-| 基因组 | 转录本数 | 基因数 | 平均每个基因转录本数 |
-| ------ | -------- | ------ | -------------------- |
-| A2     | 36485    | 16907  | 2.15                 |
-| D5     | 31368    | 16327  | 1.92                 |
-| At     | 30227    | 13134  | 2.3                  |
-| Dt     | 21437    | 13681  | 1.56                 |
-| TM1    | 51664    | 26815  | 1.92                 |
-
-#### 似乎还不是这么回事
-
-应该是获取`samp1.known.gtf`文件内的内容，在加上`update.gtf`内PacBio转录本的内容
-
-> 并且这一步的long read 数据也不需要去冗余了
+统计数据
 
 ```bash
-### PacBio know gtf 还得去重
-sort -k1,1 -k4,5n samp1.known.gtf |uniq |cat - update.gtf |grep PB|awk '$3~/trans/&&$1~/Ghir/{print $0}'|wc -l
-## 获取下一步鉴定AS的注释文件
-sort -k1,1 -k4,5n samp1.known.gtf |uniq |cat - update.gtf |grep PB >
+##输入的CSS isoform数目
+grep ">" /public/home/zpliu/work/Alternative/result/Gr_result/CO41_42_result/04_Cluster/all.quivered.fa|wc -l
+
+##矫正后的isoform数目
+awk '$3~/tran/{print $0}' PacBio.gtf |wc -l
+##基因数目
+awk '$3~/tran/{print $0}' PacBio.gtf |cut -f9|cut -f1 -d ";"|sort |uniq |wc -l
 ```
 
+| 基因组 | FLNC CSS isoform | 注释后 | 基因数目 | 平均每个基因转录本数目 |
+| ------ | ---------------- | ------ | -------- | ---------------------- |
+| A2     | 209256           | 44775  | 19135    | 2.33                   |
+| D5     | 157049           | 37865  | 17736    | 2.13                   |
+| At     | -                | 31507  | 14830    | 2.12                   |
+| Dt     | -                | 28389  | 15426    | 1.84                   |
+| TM1    | 245865           | 59897  | 30257    | 1.97                   |
 
++ `samp1.known.gtf`与已有基因注释相匹配
++ `samp1.novel.gtf`与已有基因相匹配但是是新的注释信息
++ `samp1.unrecog.gtf`比对到基因组，但是不是已经注释的基因区域
++ `samp1.detail.txt`比对到基因组区域，有的可能没有被二代read支持
+
+#### 统计long-read的比对情况
+
+```bash
+wc -l samp1.detail.txt
+awk '$3~/tran/{print $0}' samp1.known.gtf |wc -l
+awk '$3~/tran/{print $0}' samp1.novel.gtf |wc -l
+awk '$3~/tran/{print $0}' samp1.unrecog.gtf |wc -l
+```
+
+| 基因组 | total  | know_FLNC | novel_FLNC | unrecongnized_FLNC | Other |
+| ------ | ------ | --------- | ---------- | ------------------ | ----- |
+| TM1    | 241195 | 13865     | 162645     | 23223              | 41462 |
+| A2     | 205541 | 13577     | 133663     | 16170              | 42131 |
+| D5     | 153149 | 10214     | 105283     | 14798              | 22854 |
 
 
 
