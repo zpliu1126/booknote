@@ -113,3 +113,17 @@ awk '$3~/tran/{print $0}' samp1.unrecog.gtf |wc -l
 
 
 
+### PacBio 转录本与参考基因组转录本
+
+1. 长度上的差异
+
+```bash
+awk -F "\t" '$2~/lr2rmats/{split($9,a,";");if($3=="exon"){b[a[2]]+=1;c[a[2]]+=$5-$4+1}}$2!~/lr2rmats/{split($9,a,";");if($3=="exon"){b[a[1]]+=1;c[a[1]]+=$5-$4+1}}END{for(i in b){print i"\t"b[i]"\t"c[i]}}' update.gtf |head
+```
+
+1. exon数目上的差异
+
+```bash
+
+```
+

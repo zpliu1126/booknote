@@ -23,6 +23,10 @@ pip install pandoc
 
 
 
+### 在windows建立快捷命令
+
+> https://blog.csdn.net/yiranzhiliposui/article/details/83116819
+
 
 
 ### 参考
