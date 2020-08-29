@@ -1,0 +1,29 @@
+使用PacBio RS_IsoSeq pipeline  处理全长转录本数据
+
+1. 原始的嵌合序列CCS经过处理后得到FLNC
+2. FLNC又分为高质量的isoform和低质量的isoform；由于高质量的isoform和低质量的isoform数量上存在差异；因此进去去冗余最终得到非冗余的转录本
+
+基于RNA-seq数据得到的splice junctions对CCS的错误进行矫正同时鉴定和验证splice isoforms。
+
+再使用RNA-seq对CCS进行error corrected矫正后，预测的splice junction精度将会显著提高。
+
+### 使用STAIR的流程
+
+1. FLNC 在使用MPA90的阀值进行筛选
+2. 进行错误矫正后使用STAIR处理CCS得到对应的转录本和发生splice的 isoforms
+
+
+
+### 矫正FLNC read
+
+使用proovread-2.14.0对CCS序列进行矫正
+
+#### 输入文件
+
+1. fastq|fasta格式的css文件
+2. 高覆盖度的RNA-seq文件，如果有多个重复的话可以使用([FLASh](http://ccb.jhu.edu/software/FLASH/)) 进行合并
+
+#### 输出文件
+
+
+
