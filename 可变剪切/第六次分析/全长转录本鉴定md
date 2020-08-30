@@ -1,7 +1,8 @@
 使用PacBio RS_IsoSeq pipeline  处理全长转录本数据
 
-1. 原始的嵌合序列CCS经过处理后得到FLNC
-2. FLNC又分为高质量的isoform和低质量的isoform；由于高质量的isoform和低质量的isoform数量上存在差异；因此进去去冗余最终得到非冗余的转录本
+1. 原始的嵌合序列CCS搜索引物和ployA 区分FLNC 和非全长read
+2. FLNC经过cluster在与nFL进行polish就得到了full-length isoform
+3. FLNC又分为高质量的isoform和低质量的isoform；由于高质量的isoform和低质量的isoform数量上存在差异；因此进去去冗余最终得到非冗余的转录本
 
 基于RNA-seq数据得到的splice junctions对CCS的错误进行矫正同时鉴定和验证splice isoforms。
 
@@ -21,9 +22,64 @@
 #### 输入文件
 
 1. fastq|fasta格式的css文件
-2. 高覆盖度的RNA-seq文件，如果有多个重复的话可以使用([FLASh](http://ccb.jhu.edu/software/FLASH/)) 进行合并
+2. 高覆盖度的RNA-seq文件，有重叠的双端测序的文件使用([FLASh](http://ccb.jhu.edu/software/FLASH/)) 进行合并生成一条链的测序文件,如果有多个重复就使用多次`-s`参数
 
 #### 输出文件
 
 
+
+#### 合并双端测序的short read
+
+```bash
+~/software/FLASH-1.2.11-Linux-x86_64/flash  SRR5886147_Trimm_1P SRR5886147_Trimm_2P -d 输出文件目录 -t 10  --max-overlap 65
+```
+
+#### 对CCS序列进行矫正
+
+这里矫正的时候选择polish后的
+
+```bash
+cd /public/home/zpliu/work/Alternative/result/Gh_result/CO31_32_result/04_Cluster
+## 使用默认参数进行矫正
+~/github/proovread/bin/proovread -l quivered.all.fa  -s shortreads/out.extendedFrags.fastq  -s shortreads/SRR5886146.extendedFrags.fastq  -p correct  -t 10
+```
+
+#### 将矫正后的FLNC比对到基因组
+
+使用Gmap将FLNC比对得到SAM文件后，过滤比对得分小于30的；[使用](https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse-redundant-isoforms-has-genome)`collapse_isoforms_by_sam.py  `将高质量和低质量的isoform去冗余得到`non-redundant transcripts  `
+
+```bash
+
+```
+
+
+
+#### 与参考基因组注释的转录本进行比较
+
+将PacBio的isoform分为两类，这里可以考虑使用 **MatchAnnot**包进行处理
+
++ unannotated isoforms
++ annotated isoforms
+
+> 将去冗余后的PacBio isoform使用GMAP比对到参考基因组，得到SAM文件后；将参考基因组中的注释的每个转录本与对应的PacBio转录本进行exon by exon 的比较
+
+针对每个FL-isoform 输出一个与之存在交集的注释转录本
+
++ 每个
+
+#### 统计AS与计算PSI值
+
+SUPPA 
+
+在`ioe`模式下生成的gtf文件用于在USC浏览器中加载；
+
+
+
+
+
+### 方法参考
+
+1. PacBio full-length cDNA sequencing integrated with RNA-seq reads drastically improves the discovery of splicing transcripts in rice  
+2. Full-length sequencing of ginkgo transcriptomes for an in-depth understanding of flavonoid and terpenoid trilactone biosynthesis
+3. https://aasldpubs.onlinelibrary.wiley.com/doi/full/10.1002/hep.30500
 
