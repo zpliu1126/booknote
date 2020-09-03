@@ -13,8 +13,6 @@
 1. FLNC 在使用MPA90的阀值进行筛选
 2. 进行错误矫正后使用STAIR处理CCS得到对应的转录本和发生splice的 isoforms
 
-
-
 ### 矫正FLNC read
 
 使用proovread-2.14.0对CCS序列进行矫正
@@ -44,19 +42,26 @@ cd /public/home/zpliu/work/Alternative/result/Gh_result/CO31_32_result/04_Cluste
 ~/github/proovread/bin/proovread -l quivered.all.fa  -s shortreads/out.extendedFrags.fastq  -s shortreads/SRR5886146.extendedFrags.fastq  -p correct  -t 10
 ```
 
+输出文件`correct.trimmed.fa`用于后续分析
+
 #### 将矫正后的FLNC比对到基因组
 
 使用Gmap将FLNC比对得到SAM文件后，过滤比对得分小于30的；[使用](https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse-redundant-isoforms-has-genome)`collapse_isoforms_by_sam.py  `将高质量和低质量的isoform去冗余得到`non-redundant transcripts  `
 
 ```bash
-
+##使用Gmap进行比对
+gmap -D ~/work/Alternative/data/gmap_build/Graimondii_221_v2.0/ -d Graimondii_221_v2.0  -f samse  -t 10 -n 1 --min-trimmed-coverage=0.85 --min-identity=0.90 >correce.sam
+##按照基因组位置和比对得分进行排序
+grep -E '^@' -v correce.sam |sort -k 3,3 -k 4,4n > coorect.sorted.sam
+##进行去冗余
+collapse_isoforms_by_sam.py  -s coorect.sorted.sam  --input ../04_Cluster/correct/correct/correct.trimmed.fq --fq -o collapseOut 
+##将对于的fastq文件转换为fasta
+awk '{if(NR%4 == 1){print ">" substr($0, 2)}}{if(NR%4 == 2){print}}'  collapseOut.collapsed.rep.fq  |sed 's/|.*//g' >all_collapse.fa
 ```
-
-
 
 #### 与参考基因组注释的转录本进行比较
 
-将PacBio的isoform分为两类，这里可以考虑使用 **MatchAnnot**包进行处理
+将PacBio的isoform分为两类，这里可以考虑使用	包进行处理
 
 + unannotated isoforms
 + annotated isoforms
@@ -65,16 +70,32 @@ cd /public/home/zpliu/work/Alternative/result/Gh_result/CO31_32_result/04_Cluste
 
 针对每个FL-isoform 输出一个与之存在交集的注释转录本
 
-+ 每个
+这里有些问题，比如组装出了scaffold的序列进行，但是没有对其进行注释；这时候sam文件有对应的比对信息而参考基因组不能够比对到；因此把这些scaffold上的PacBio序列全部都删除掉；
 
-#### 统计AS与计算PSI值
+这里可以通过分析`result`这一行判断isoform与参考注释的具体比对信息
 
-SUPPA 
+> result:   PB.14019.3                                          EVM_prediction_Ga10G0010  evm.model.Ga10G0010       ex:  5  sc: 5  5-3:   133  -117
+>
+> 这个比对得分为5，并且PacBio与参考注释间的差异只在5‘和3’端存在133和117bp的差异
 
-在`ioe`模式下生成的gtf文件用于在USC浏览器中加载；
+```bash
+#这个数据可以与np的文章进做一个类似的分析
+#polyA的数目和motif分析
+```
 
+根据与参考基因注释的信息，对PacBio的注释信息进行更新
 
-
+```bash
+##将去冗余后的序列与参考基因组进行比对
+cat all_collapse.fa |gmap -D ~/work/Alternative/data/gmap_build/Graimondii_221_v2.0/ -d Graimondii_221_v2.0  -f samse  -t 10 -n 1 --min-trimmed-coverage=0.85 --min-identity=0.90 >all_collapse.sam
+#按照染色体坐标进行排序
+samtools sort  -O SAM all_collapse.sam |grep -E "^@" -v |awk -F "\t" '$3!~/scaffold/{print $0}' >all_collapsesort.sam
+##与参考基因组的注释进行比较
+python2 ~/software/MatchAnnot/matchAnnot.py --gtf  ~/work/Alternative/data/Gr_genome/Graimondii_221_v2.1.gene.gtf all_collapsesort.sam --format alt >annotion.out
+##更新PacBio的注释信息，使用自己写的脚本
+python mergeAnnotion.py   -gff collapseOut.collapsed.gff -annotion annotion.out  -out merge.gff 
+sed 's/EVM_prediction_/evm.TU./g' -i merge.gff
+```
 
 
 ### 方法参考
@@ -82,4 +103,67 @@ SUPPA
 1. PacBio full-length cDNA sequencing integrated with RNA-seq reads drastically improves the discovery of splicing transcripts in rice  
 2. Full-length sequencing of ginkgo transcriptomes for an in-depth understanding of flavonoid and terpenoid trilactone biosynthesis
 3. https://aasldpubs.onlinelibrary.wiley.com/doi/full/10.1002/hep.30500
+
+#### 数据统计分析
+
+1. 原始数据到最终得到的转录本数
+2. full length转录本的长度与参考基因组比较
+3. exon数目
+4. 位置
+5. polyadenylation motifs near  the 3' end of isoform
+
+#### isoform与参考基因的位置的比较
+
+根据matchAnnotion的得分就可以判断isoform与参考基因组转录本的比对情况
+
+isoform覆盖到基因上的情况
+
+> + 多少的full length isoform 比对到基因区域与非基因区域
+
+> gene:     Ghir_A10G000010           403               174                  9208   4924     +
+> gene:     Ghir_A10G000010           403               167                  9208   5095     +
+>
+> 第四个值表示gene的起始或终止与isoform的起始或终止差值；第六个值情况同样
+
+##### 对比对到基因区域的 full length isoform进行分类	
+
++ annotion isoform
++ unannotion isoform  与参考基因中所有转录本剪切位点进行比较，存在不一样的剪切位点
+
+```bash
+python ~/github/zpliuCode/script/genestruct/AnnotionIsoform.py  -refgtf ~/work/Alternative/data/Ghirsutum_genome_HAU_v1.0/Ghirsutum_gene_model.gtf -isogtf merge.gtf  -o 333
+##统计isoform剪切位点与参考基因组的注释一致的
+awk '$3=="Annotion"{print $0}' 333 |wc -l
+##对每个基因转录的情况进行统计
+awk '$3~/unAnn/{a[$2][1]+=1}$3~/Anno/{a[$2][2]+=1}END{for(i in a){print i"\t"a[i][1]"\t"a[i][2]}}' 333 
+```
+
+### ~~统计PacBio 转录本包含polyA motif的情况~~
+
+```bash
+grep "poly" annotion.out |wc -l
+##统计每个转录本包含有多少个polyadenylation motif
+grep poly annotion.out |awk -F ":" '{print NF-2}' >TM1polyAStatic.txt 
+```
+
+#### 统计转录本长度的比较情况
+
+```bash
+awk 'NR==1&&$1~/^>/{print $0}NR>=2&&$1~/^>/{print "\n"$0}$1~/^[^>]/{printf $0}' all_collapse.fa|awk '$1~/^[^>]/{print length($0)"\treference\tTM-1"}' >TM1_PacBiolength.txt
+```
+
+
+
+在所有工作都做完的时候，TM的发现矫正后PacBio FL-isoform比参考基因组的isoform短
+
+```bash
+##修改比对的sam文件
+awk -F "\t" '{split($1,a,"|");print a[1]"\t"$0}' all_collapsesort.sam |cut -f2 --complement >1
+```
+
+
+
+
+
+
 

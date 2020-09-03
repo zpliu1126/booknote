@@ -8,6 +8,7 @@
 + 因为用cDNA序列去预测，所以不用反转
 
 ```bash
+module load EMBOSS/6.5.7	
 getorf  -sequence 111.fa   -find 3 -noreverse
 ```
 
@@ -25,4 +26,10 @@ getorf  -sequence 111.fa   -find 3 -noreverse
 我感觉只有其中距离是可以调节的，只要发生AS的isoform比没有发生AS的isoform提取终止就行
 
 + 针对每种类型的AS进行计算
+
+
+
+### 使用NCBI的ORFfinder搜索cDNA中的ORF
+
+
 
