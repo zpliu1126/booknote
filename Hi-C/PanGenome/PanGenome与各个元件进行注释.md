@@ -72,6 +72,12 @@ cat gffFil|awk -F ";" '{print $1}'|awk '$3~/exon/{print $1,$4,$5,$9}' OFS="\t" |
 awk '{print $1,$2+2,$3,$4}' OFS="\t" hista_splice.txt >intron.bed
 ```
 
+### 提取gene 坐标BED文件
+
+```bash
+awk -F ";" '{print $1}'  Gbarbadense_gene_model.gff3 |awk -F "\t" '$3~/gene/&&$1~/Gb/{OFS="\t";print  $1,$4,$5,$9}'|sed 's/ID=//g' |sort -k1,1 -k2,3n
+```
+
 
 
 ## 进行注释
