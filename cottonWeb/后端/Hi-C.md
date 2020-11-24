@@ -9,8 +9,9 @@
 
 ![img](file:///C:\Users\PC\AppData\Roaming\Tencent\TIM\Temp\[5UQ[BL(6~BS2JV6W}N6[%S.png)http://epigenomegateway.wustl.edu/support/2019ENCODE/2019ENCODE_Tutorial.pdf
 
-
+19238177	19236934	
 
 基因组浏览器大全：
 
 https://www.jianshu.com/p/385412933ecf
+

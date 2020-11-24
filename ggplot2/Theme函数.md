@@ -32,6 +32,16 @@ axis.text.x = element_blank()
     )
 ```
 
+#### 显示外边框
+
+```R
+theme(
+    panel.border = element_rect(fill = NA), 
+  )
+```
+
+
+
 
 
 
