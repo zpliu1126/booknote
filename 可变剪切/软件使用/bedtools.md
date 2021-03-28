@@ -68,7 +68,40 @@
 	chr2	243199373
 ```
 
+#### 将bed文件转换为BAM文件后，建索引方便提取数据
 
+```bash
+##只会保留名字信息
+head -5 rmsk.hg18.chr21.bed
+chr21 9719768  9721892  ALR/Alpha  1004  +
+chr21 9721905  9725582  ALR/Alpha  1010  +
+chr21 9725582  9725977  L1PA3 3288 +
+chr21 9726021  9729309  ALR/Alpha  1051  +
+chr21 9729320  9729809  L1PA3 3897 -
+##转换后
+bedToBam -i rmsk.hg18.chr21.bed -g human.hg18.genome > rmsk.hg18.chr21.bam
+
+samtools view rmsk.hg18.chr21.bam | head -5
+ALR/Alpha  0   chr21 9719769  255  2124M *  0  0  *  *
+ALR/Alpha  0   chr21 9721906  255  3677M *  0  0  *  *
+L1PA3      0   chr21 9725583  255  395M  *  0  0  *  *
+ALR/Alpha  0   chr21 9726022  255  3288M *  0  0  *  *
+L1PA3      16  chr21 9729321  255  489M  *  0  0  *  *
+```
+
+
+
+#### 提取基因启动子区域序列
+
+```bash
+bedtools flank
+```
+
+
+
+
+
+#### 
 
 
 

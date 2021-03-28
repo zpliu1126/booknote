@@ -470,10 +470,6 @@ python ../AnnotionAS/isoformradio.py  -homolog ../../all_homologGene.txt  -FC A2
 
 
 
-
-
-
-
 #### 保守AS isoform对应的AS events
 
 > 同源基因间保守的剪切方式，产生对应的保守的AS isoform

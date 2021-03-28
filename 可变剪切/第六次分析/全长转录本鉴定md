@@ -61,7 +61,7 @@ awk '{if(NR%4 == 1){print ">" substr($0, 2)}}{if(NR%4 == 2){print}}'  collapseOu
 
 #### 与参考基因组注释的转录本进行比较
 
-将PacBio的isoform分为两类，这里可以考虑使用	包进行处理
+将PacBio的isoform分为两类，这里可以考虑使用包进行处理
 
 + unannotated isoforms
 + annotated isoforms

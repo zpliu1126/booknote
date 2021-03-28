@@ -92,6 +92,8 @@ awk '$1~/^[^#]/{print $5"\tIR\tA2"}' ~/work/Alternative/result/Ga_result/CO11_12
 + 使用k-mer构造与AS event长度相同的k-mer，保留相似度大于90%，相似长度占k-mer长度的90%以上，得分最高的k-mer片段
 + 将同源基因的k-mer片段与同源基因的AS事件取交集，并且为同类型事件，交集长度占k-mer长度的90%以上
 
+> 这个k-mer的方法受基因注释的影响，当基因注释不完整的时候回没有那个k-mer序列，从而匹配不到
+
 **各个AS 事件的保守的比例**
 
 ```bash
@@ -130,7 +132,7 @@ A5事件在四种比较中，占所有A5事件的比例
 
 **各种保守剪切事件占据所有事件的比例；**
 
-> 通过比较发现同一个直系基因组间AS的保守比例高于非直系同源基因组；并且IR、A3、A5事件相比于SE事件有着更高的保守比例
+> 通过比较发现同一个直系基因组间A S的保守比例高于非直系同源基因组；并且IR、A3、A5事件相比于SE事件有着更高的保守比例
 
 | 比较     | IR     | SE     | A3     | A5     |
 | -------- | ------ | ------ | ------ | ------ |
@@ -186,8 +188,6 @@ awk '$5>$7&&$5>$8&&$6>$7&&$6>$8{print $0}' 22 |awk '{print $1"\t"$5"\tA2\n"$1"\t
 
 ```
 
-
-
 **保守的AS pattern：基因存在保守的AS事件**；
 
 完全保守的AS pattern：所有的AS都是保守的。
@@ -200,7 +200,7 @@ awk '$2==$3&&$2==$5&&$2!=0{print $0}' 11 |wc -l
 
 A2和At间保守的AS pattern gene个数
 
-> A2和At间总共有8667个基因存在AS，其中仅仅只有1746(20.1%)个基因存在保守的AS，而仅仅只有135个基因存在保守的AS模式
+> A2和At间总共有8667个同源基因存在AS，其中仅仅只有1746(20.1%)个基因存在保守的AS，而仅仅只有135个基因存在保守的AS模式
 
 D5和Dt间保守的AS pattern gene 个数
 
@@ -217,6 +217,157 @@ At和Dt间保守的AS pattern gene 个数
 
 
 与祖先基因组相比，约有16%~21.64%的直系同源基因都包含保守的剪切模式；同时A、D两个亚基因组在多倍化后，A、D之间存在保守AS模式的基因数目相比于祖先二倍体A2和D5中的状态来说更少了。
+
+### Ka/Ks分析
+
+> **参考：**A comparative transcriptional landscape of maize and
+> sorghum obtained by single-molecule sequencing  
+>
+> + **同源基因都存在PacBio转录本**，使用表达量最高的那个转录本的作为基因的CDS序列
+
+```bash
+##根据预测的ORF序列，获取PacBio转录本对应CDS序列
+python ~/github/zpliuCode/script/genestruct/getCDSsequenceByEMBOSS.py TM1_PacBio.gtf ~/work/Alternative/data/Ghirsutum_genome_HAU_v1.0/Ghirsutum_genome_HAU_v1.0.fasta TM1_PacBio_EMBOSS.fa TM1_PacBio_CDS.fa
+##获取PacBio转录本的peptide序列
+python Gh_result/04KaKs/getHomologProductiveSequence.py ../01EMBOSS/TM1_peptide.fa  ~/work/Alternative/result/Gh_result/01productiveIsoform/productive_isoform.txt At_Dt_homolog_gene_withPacBio_read.txt At_Dt.peptide
+```
+
+当同源基因都存在PacBio转录本时，使用表达量最高的PacBio转录本作为基因的CDS序列。
+
++ proc 文件需要和序列文件放同一个文件夹
++ 需要在序列文件所在目录运行脚本
+
+```bash
+##计算同源基因间的Ka/Ks值
+  export PATH="/public/home/zpliu/software/paraat/ParaAT2.0/:$PATH"
+  export PATH="/public/home/zpliu/software/KaKs_Calculator2.0/bin/Linux/:$PATH"
+ module load mafft/7.453
+  module load BLAST/2.2.26-Linux_x86_64
+  cd ${filePath}/${item}/
+  ParaAT.pl -h ${homologFile} -a ${peptideFile} -n ${CDSFile} -p proc -o ${filePath}/${item}/KaKs2 -m mafft -c 1 -f axt -g -k
+  ##合并所有基因的Ka/Ks信息
+  
+  ##使用NG 方法计算Ka/Ks值，需要循环的使用KaKs_Calculator
+  使用ParaAT运行后的`aln.axt`文件
+  过滤掉Ks为NA的项
+```
+
+> 根据Ka/Ks的结果筛选正向选择和负向选择的基因中AS基因变化的比例
+>
+> + AS保守的基因
+> + 没有AS的基因
+> + 存在AS的差异
+>
+> 比较各个基因组中AS基因和非AS基因的**转录本分化指数**TDI
+>
+> > 1. 表达的（两个基因组中都存在PacBio转录本）发生AS的同源基因
+> > 2. 表达的未发生AS的同源基因
+> >
+> > 更高的TDI意味着更年轻的转录组，多倍化过程中处于发散阶段；而更低的TDI意味了多倍化过程中处于保守的状态
+>
+> 这里用来计算的TDI的基因是根据基因AS与否分为了两类：
+>
+> + 过滤掉Ka/Ks值为NA的
+
+
+
+
+
+| 基因组 | 都存在转录本同源基因数 | 发生AS | 未发生AS |
+| ------ | ---------------------- | ------ | -------- |
+| A2     | 10670                  | 4720   | 4253     |
+| D5     | 10198                  | 5401   | 3878     |
+| At     | 10670                  | 4289   | 4684     |
+| Dt     | 10198                  | 4409   | 4870     |
+
+
+
+```bash
+##基因的表达量用RNA-seq的结果
+python caculate_TDI.py A2_At_KaKs.txt ~/work/Alternative/result/Gh_result/CO31_32_result/geneFPKM_readsCount/TM1_geneFPKM_read.txt ../../05polyploidization/02ASevent/At_homolog_AS.txt ../A2_At/A2_At_homolog_gene_withPacBio_read.txt 11
+##存在AS基因的TDI值
+grep -v NA At_kaks_readCount_AS.txt |grep AS  |awk '{a+=$2*$3;b+=$3}END{print a/b}'
+##不存AS基因的TDI值
+grep -v NA At_kaks_readCount_AS.txt |grep AS  -v |awk '{a+=$2*$3;b+=$3}END{print a/b}'
+
+```
+
+| 基因组 | AS TDI | noneAS TDI |
+| ------ | ------ | ---------- |
+| A2     | 0.41   | 0.35       |
+| D5     | 0.33   | 0.28       |
+| At     | 0.44   | 0.36       |
+| Dt     | 0.34   | 0.27       |
+
+> AS基因在多倍化过程中，进化更快一些；而且A2相比于D5基因进化更快。
+
+### AS事件的保守性分析
+
+> + 由于k-mer序列的提取依赖于基因的注释信息，因此**基因注释信息的准确信会对**
+> + 如果序列在基因中由于结构变异或者TE导致的缺失也是会鉴定不到的
+
+筛选指标：
+
++ AS event 与kmer序列**保守核苷酸所占的比例**
+
+使用`muscle`分析k-mer序列之间的保守程度
+
+```bash
+##提取每个gene的bed文件
+awk '$3~/gene/{OFS="\t";print $1,$4,$5,$7,$9}' G.arboreum.Chr.v1.0.gff|sed -e 's/;.*//g' -e 's/ID=//g'|awk '{OFS="\t";print $1,$2,$3,$5,"1",$4}' >A2_gene.bed
+##由于bedtools提取序列的坐标从0开始，改造一下bed文件
+awk '{OFS="\t";print $1,$2-1,$3,$4,$5,$6}' A2_gene.bed  >A2_fasta.bed 
+##提取对应的gene序列
+ sed -i 's/(.*//g' A2_gene.fa
+```
+
+提取k-mer序列进行muscle
+
++ 脚本太慢了，直接拆分文件提交任务进行跑
+
+```bash
+##拆分文件
+split -d -10  A2_homolog_AS.txt split/AS_10_item
+##批量提交任务
+python ~/github/zpliuCode/Isoseq3/04ASconserved/ASkmer.py  -AS ../05polyploidization/02ASevent/A2_homolog_AS.txt -querygene A2_gene.bed  -datagene TM1_gene.bed  -genefasta A2_At.fasta -homolog ../05polyploidization/01isoformConserved/A2_vs_At/homolog_gene.txt -out 11 -p 20
+
+```
+
+**序列水平即使有很大的差异，但仍旧发生了AS**
+
+>Ghir_D05G000980;RI:Ghir_D05:901620:901829-902035:902068:-	>Ghir_A05G000820;Ghir_A05:951825-952031	98	206
+>
+>这个RI与kmer即使只有98/206的相似度，但是在kmer的位置还是发生了AS事件
+
+### 统计单个碱基上比对到的read数目
+
++ `split`只保留read覆盖区域比对质量为M的
+
+```bash
+##将bam文件转换为bed文件
+samtools view -O BAM -L primer.bed  D5_rmdup.bam  >D5.bam
+~/software/bedtools2-2.29.0/bin/bamToBed -i read.bam -split >read.bed 
+##制作window
+~/software/bedtools2-2.29.0/bin/windowMaker  -b primer.bed  -w 0 -s 1 >primer_window.bed 
+##取交集
+~/software/bedtools2-2.29.0/bin/intersectBed  -loj -a primer_window.bed  -b read.bed |awk '{a[$2]+=1}END{for(i in a){print i"\t"a[i]}}'|sort -k1,1n >D5_read_count.txt
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

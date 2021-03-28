@@ -1,6 +1,6 @@
 ### 1.配置Kobas
 
-kobas运行环境为python2
+>  **kobas运行环境为python2**
 
 ```bash
 ##加载模块

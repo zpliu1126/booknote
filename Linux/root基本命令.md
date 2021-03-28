@@ -54,5 +54,5 @@ rsync --delete-before -a -H -v --progress --stats  /home/aniya/空文件夹 目�
 ssh -L 3306:localhost:3306 账号@服务器地址 -p 22
 ```
 
-
+[![6B2KiD.png](https://s3.ax1x.com/2021/03/15/6B2KiD.png)](https://imgtu.com/i/6B2KiD)
 

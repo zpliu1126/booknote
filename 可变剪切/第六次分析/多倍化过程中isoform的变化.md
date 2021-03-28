@@ -15,7 +15,24 @@
 
 首先根据FPKM和PacBio转录本数目筛选同源基因对
 
-保守转录本的定义： CDS序列长度一样
+保守转录本的定义： 
+
+> CDS序列长度一样,**相似的氨基酸序列占整个氨基酸序列长度的**
+>
+> + CDS序列一样长
+> + 序列相似度达到95%
+
+分析转录本的氨基酸序列保守程度
+
+```bash
+python ~/github/zpliuCode/transcriptSV/transcript_CDS_identity.py -homolog ~/work/Alternative/result/homologo/homologGene/Result/D5_vs_Dt_collinearity.txt -fasta1 ~/work/Alternative/result/Gr_result/CO41_42_result/collapse/PacBio_CDS.fa -fasta2 ~/work/Alternative/result/Gh_result/CO31_32_result/collapse/PacBio_CDS.fa  -RNAseq1 D5_PacBio.txt -RNAseq2 TM1_PacBio.txt -prex1 D5  -prex2 Dt  -out transcriptSVs/D5_Dt_isoform_CDS.txt
+```
+
++ 同一个基因组内，有多少**比例的AS会导致转录本CDS序列的改变**，甚至于有的AS不会导致CDS序列的改变。
+  + Productive 转录本对应的CDS的长度
+  + 发生AS的转录本的CDS的长度逐渐在减少
++ 同源基因是否存在功能保守(转录本的CDS序列保守)的转录本
++ 同源基因主要表达的转录本是否仍旧是功能保守的
 
 | 两个亚基因组 | 存在保守转录本 | 总基因数 |
 | ------------ | -------------- | -------- |

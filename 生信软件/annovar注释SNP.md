@@ -22,7 +22,7 @@ conda update ucsc-gtftogenepred
 usage
 
 ```bash
-gtgtfToGenePred -genePredExt Gbarbadense_gene_model.gtf  Gbarbadense_gene_model.PredfToGenePred Gbarbadense_gene_model.gtf Gbarbadense_refGene.txt
+gtfToGenePred -genePredExt Gbarbadense_gene_model.gtf  Gbarbadense_gene_model.refGene.txt 
 ```
 
 
@@ -39,7 +39,7 @@ gtgtfToGenePred -genePredExt Gbarbadense_gene_model.gtf  Gbarbadense_gene_model.
 
 ```bash
 module load annovar
-retrieve_seq_from_fasta.pl --format refGene --seqfile Gbarbadense_genome_HAU_v2.0.fasta Gbarbadense_gene_model.Pred --outfile Gbarbadense_refGEneMrna.fa
+retrieve_seq_from_fasta.pl --format refGene --seqfile Gbarbadense_genome_HAU_v2.0.fasta Gbarbadense_gene_model.refGene.txt --outfile Gbarbadense_refGEneMrna.fa
 ```
 
 2. 将vcf文件转换为annovar格式
@@ -59,6 +59,7 @@ convert2annovar.pl --includeinfo --allsample  --withfreq --format vcf4 ./../Gbar
    + `--thread`线程数
    + `--maxgenethread`当线程数超过6时，需要声明，不然最多就是6个线程在跑
    + ` --outfile `输出文件前缀
+   + `Gbarbadense/`文件夹中包含`Gbarbadense_gene_model.refGene.txt `文件
 
    
 

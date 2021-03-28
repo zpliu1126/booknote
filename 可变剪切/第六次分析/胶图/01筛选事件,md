@@ -1,0 +1,45 @@
+### 筛选要跑胶的基因
+
++ 根据PacBio转录本的PSI，read数目进行筛选
++ 根据RNA-seq计算得到的PSI进行筛选
++ 根据剪接事件的保守性进行筛选
++ 根据基因的功能进行筛选
+
+```bash
+##对筛选的AS事件，进行量化03quantifyASevent
+python ~/github/zpliuCode/Isoseq3/03ASquantify/caculateAS_ratio.py  ../02ASevent/A2_homolog_AS.txt  ~/work/Alternative/result/Gh_result/CO31_32_result/evolution4/A2_PacBio.txt  11
+##使用RNA-seq的数据进行量化
+python ~/github/zpliuCode/Isoseq3/03ASquantify/PSIByRNAseq.py  1  ~/work/Alternative/result/homologo/FEST3/geneExpress/hisat2/D5_rmdup.bam 22
+
+
+```
+
+### 1.AS事件的验证，比较有意义的功能基因
+
+
+
+
+
+### 2.多倍化过程中保守的AS事件
+
+#### 1.RI to RI
+
+```bash
+##保守的AS event
+awk '$3>=0.05&&$3<=0.95&&$4>5&&$7>=0.05&&$8>=5&&$7<=0.95{print $0}'  RI2RI_RNA_PSI.txt |less
+```
+
+#### 2.RI to intron
+
+```bash
+##筛选基因
+awk '$3>=0.05&&$3<=0.95&&$4>5{print $0}'  RI2intron_RNA-seq_PSI.txt
+```
+
+#### 3.intron to RI
+
+```bash
+##筛选基因
+awk '$7>=0.05&&$8>=5&&$7<=0.95{print $0}' intron2RI_RNA-seq_PSI.txt
+```
+
