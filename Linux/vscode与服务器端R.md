@@ -102,6 +102,58 @@ vscode 一款让人爱不释手的IDE，也是前端工程师一大杀器。在w
 
 
 
+### 云端部署vscode
+
+由于没有管理员权限，就只能以非管理员的形式进行安装了
+
+#### 1.在云服务器中安装`code-serve`
+
+```bash
+## 下载最新版本的压缩包 https://github.com/cdr/code-server/releases/tag/v3.9.2
+
+wget -c https://github.com/cdr/code-server/releases/download/v3.9.2/code-server-3.9.2-linux-amd64.tar.gz
+##运行code-serve
+cd   code-server-3.9.2-linux-amd64/bin
+./code-server
+```
+
+#### 2.配置code-serve
+
+> 参考 https://github.com/cdr/code-server/blob/main/docs/guide.md
+
+设置登录密码
+
+```bash
+##配置文件 ~/.config/code-server/config.yaml
+ # Replaces "auth: password" with "auth: none" in the code-server config.
+sed -i.bak 's/auth: password/auth: none/' ~/.config/code-server/config.yaml
+```
+
+#### 3.安装插件
+
+有的插件可能不是开源的，在vscode 上可以安装而在conde-serve上不行，但是code-server上有自己的开源插件marketplace，通过GitHub来构建Vs code上的代码
+
+因此如何安装code-serve上缺失的一些插件呢？
+
++ 对于插件` HTML Snippets `而言
+
+```bash
+## 下载github上的源代码
+wget -c https://github.com/abusaidm/html-snippets/archive/refs/heads/master.zip
+## 解压到code-serer extension目录即可
+unzip master.zip
+```
+
+遇到vscode不能识别python编译器的问题，好像是python插件版本的问题
+
+> 参考 https://github.com/microsoft/vscode-python/issues/14959#issuecomment-778113519
+
+#### 配置代码补齐工具`Kite`,不适用于centos
+
+
+
+
+
 ### 参考
 
 1.  https://www.jianshu.com/p/0740b08e2a37 
