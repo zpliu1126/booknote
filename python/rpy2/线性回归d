@@ -1,0 +1,47 @@
+### 导入所需要的包
+
+```bash
+#使用R中的函数
+import rpy2.robjects as robjects
+#用于导入R包
+from rpy2.robjects.packages import importr
+base = importr('base')
+broom = importr('broom')
+lm=robjects.r('lm')
+# 设置向量
+#StrVector
+#IntVector
+#FloatVector
+weight = robjects.FloatVector([4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14])
+group = robjects.FloatVector([4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69])
+## 配置全局变量
+robjects.globalenv["weight"] = weight
+robjects.globalenv["group"] = group
+##回归分析
+lm_D9 = lm_D9 = lm("weight ~ group")
+
+##获取统计信息
+summaryData=base.summary(lm_D9)
+##获取拟合度
+print(broom.glance_lm(lm_D9))
+
+```
+
+### 获取summary的摘要结果
+
+```bash
+## 获取lm的统计信息
+for i in broom.glance_lm(lm_result):
+        out += list(i)
+```
+
+
+
+
+
+
+
+### 参考
+
+1. 获取summary摘要结果https://zhuanlan.zhihu.com/p/92526434
+2. rpy2的用法 https://blog.csdn.net/qq_31342997/article/details/89428158
