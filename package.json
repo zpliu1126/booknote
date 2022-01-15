@@ -19,6 +19,6 @@
   "dependencies": {
     "art-template": "^4.13.2",
     "markdown-to-html": "0.0.13",
-    "marked": "^0.7.0"
+    "marked": "^4.0.10"
   }
 }
